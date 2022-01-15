@@ -1,0 +1,10 @@
+name: Wordle to Yaml
+description: Save your Wordle scores to a Yaml file.
+runs:
+  using: node16
+  main: dist/index.js
+
+inputs:
+  wordleFileName:
+    description: The file where you want to save your Wordle scores.
+    default: _data/wordle.yml
