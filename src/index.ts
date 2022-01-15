@@ -30,7 +30,7 @@ async function wordle() {
     if (!gameNumber || !score || !body) {
       throw new Error("Could not parse GitHub Issue");
     }
-    exportVariable("WordleSummary", `Wordle ${gameNumber} ${score}`);
+    exportVariable("WordleSummary", `Wordle ${gameNumber} ${score}/6`);
     const fileName: string = getInput("wordleFileName");
     const games = (await addGame({
       gameNumber,
@@ -66,7 +66,7 @@ export async function addGame({
     won,
     date: new Date().toISOString().slice(0, 10),
   });
-  return wordleJson;
+  return wordleJson.sort((a, b) => a.number - b.number);
 }
 
 export async function toJson(fileName: string) {
