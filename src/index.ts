@@ -6,13 +6,14 @@ import { load } from "js-yaml";
 import { stringify } from "json-to-pretty-yaml";
 import { readFile, writeFile } from "fs/promises";
 
-export type Board = [string, string?, string?, string?, string?, string?];
-
-export type Score = {
+type Board = [string, string?, string?, string?, string?, string?];
+type Score = number | string;
+type Game = {
   number: number;
-  score: string;
+  score: Score;
   board: Board;
   date: string;
+  won: boolean;
 };
 
 async function wordle() {
@@ -25,40 +26,44 @@ async function wordle() {
       throw new Error("Unable to parse GitHub issue.");
     }
     exportVariable("IssueNumber", number);
-    const { gameNumber, score, board } = parseGame(title, body);
+    const { gameNumber, score, board, won } = parseGame(title, body);
     if (!gameNumber || !score || !body) {
       throw new Error("Could not parse GitHub Issue");
     }
-    exportVariable("WordleGameNumber", gameNumber);
+    exportVariable("WordleSummary", `Wordle ${gameNumber} ${score}`);
     const fileName: string = getInput("wordleFileName");
-    const scores = (await addScore({
+    const games = (await addGame({
       gameNumber,
       score,
       board,
       fileName,
-    })) as Score[];
-    await returnWriteFile(fileName, scores);
+      won,
+    })) as Game[];
+    await returnWriteFile(fileName, games);
   } catch (error) {
     setFailed(error.message);
   }
 }
 
-export async function addScore({
+export async function addGame({
   gameNumber,
   score,
   board,
   fileName,
+  won,
 }: {
   gameNumber: number;
-  score: string;
+  score: Score;
   board: Board;
   fileName: string;
+  won: boolean;
 }) {
-  const wordleJson = (await toJson(fileName)) as Score[];
+  const wordleJson = (await toJson(fileName)) as Game[];
   wordleJson.push({
     number: gameNumber,
     score,
     board,
+    won,
     date: new Date().toISOString().slice(0, 10),
   });
   return wordleJson;
@@ -76,20 +81,21 @@ export async function toJson(fileName: string) {
 export function parseGame(
   title: string,
   body: string
-): { gameNumber: number; score: string; board: Board } {
+): { gameNumber: number; score: Score; won: boolean; board: Board } {
   const split = title.split(" ");
   const gameNumber = parseInt(split[1]);
-  const score = split[2];
+  const score = split[2][0] === "X" ? "X" : parseInt(split[2][0]);
   const board = checkBoard(body);
   return {
     gameNumber,
     score,
+    won: score !== "X",
     board: board,
   };
 }
 
 function checkBoard(body: string) {
-  const board = body.split("\n");
+  const board = body.split("\n").map((row) => row.replace(/\r/, ""));
   if (!board.length || board.length < 1 || board.length > 6)
     throw new Error("Wordle board is invalid");
   return board as Board;
@@ -104,9 +110,9 @@ export async function returnReadFile(fileName: string) {
   }
 }
 
-export async function returnWriteFile(fileName: string, scores: Score[]) {
+export async function returnWriteFile(fileName: string, games: Game[]) {
   try {
-    const data = stringify(scores);
+    const data = stringify(games);
     const promise = writeFile(fileName, data);
     await promise;
   } catch (error) {

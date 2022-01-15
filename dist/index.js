@@ -10877,7 +10877,7 @@
 
     // EXPORTS
     __nccwpck_require__.d(__webpack_exports__, {
-      addScore: () => /* binding */ addScore,
+      addGame: () => /* binding */ addGame,
       default: () => /* binding */ src,
       parseGame: () => /* binding */ parseGame,
       returnReadFile: () => /* binding */ returnReadFile,
@@ -11454,9 +11454,9 @@
 
     function isHexCode(c) {
       return (
-        (0x30 /* 0 */ <= c && c <= 0x39) /* 9 */ ||
-        (0x41 /* A */ <= c && c <= 0x46) /* F */ ||
-        (0x61 /* a */ <= c && c <= 0x66) /* f */
+        (0x30 /* 0 */ <= c && c <= 0x39 /* 9 */) ||
+        (0x41 /* A */ <= c && c <= 0x46 /* F */) ||
+        (0x61 /* a */ <= c && c <= 0x66 /* f */)
       );
     }
 
@@ -14358,8 +14358,8 @@
       var cIsNsCharOrWhitespace = isNsCharOrWhitespace(c);
       var cIsNsChar = cIsNsCharOrWhitespace && !isWhitespace(c);
       return (
-        // ns-plain-safe
-        ((inblock // c = flow-in
+        (// ns-plain-safe
+        (inblock // c = flow-in
           ? cIsNsCharOrWhitespace
           : cIsNsCharOrWhitespace &&
             // - c-flow-indicator
@@ -15320,31 +15320,34 @@
             throw new Error("Unable to parse GitHub issue.");
           }
           (0, core.exportVariable)("IssueNumber", number);
-          const { gameNumber, score, board } = parseGame(title, body);
+          const { gameNumber, score, board, won } = parseGame(title, body);
           if (!gameNumber || !score || !body) {
             throw new Error("Could not parse GitHub Issue");
           }
-          (0, core.exportVariable)("WordleGameNumber", gameNumber);
+          (0,
+          core.exportVariable)("WordleSummary", `Wordle ${gameNumber} ${score}`);
           const fileName = (0, core.getInput)("wordleFileName");
-          const scores = yield addScore({
+          const games = yield addGame({
             gameNumber,
             score,
             board,
             fileName,
+            won,
           });
-          yield returnWriteFile(fileName, scores);
+          yield returnWriteFile(fileName, games);
         } catch (error) {
           (0, core.setFailed)(error.message);
         }
       });
     }
-    function addScore({ gameNumber, score, board, fileName }) {
+    function addGame({ gameNumber, score, board, fileName, won }) {
       return __awaiter(this, void 0, void 0, function* () {
         const wordleJson = yield toJson(fileName);
         wordleJson.push({
           number: gameNumber,
           score,
           board,
+          won,
           date: new Date().toISOString().slice(0, 10),
         });
         return wordleJson;
@@ -15363,16 +15366,17 @@
     function parseGame(title, body) {
       const split = title.split(" ");
       const gameNumber = parseInt(split[1]);
-      const score = split[2];
+      const score = split[2][0] === "X" ? "X" : parseInt(split[2][0]);
       const board = checkBoard(body);
       return {
         gameNumber,
         score,
+        won: score !== "X",
         board: board,
       };
     }
     function checkBoard(body) {
-      const board = body.split("\n");
+      const board = body.split("\n").map((row) => row.replace(/\r/, ""));
       if (!board.length || board.length < 1 || board.length > 6)
         throw new Error("Wordle board is invalid");
       return board;
@@ -15390,10 +15394,10 @@
         }
       });
     }
-    function returnWriteFile(fileName, scores) {
+    function returnWriteFile(fileName, games) {
       return __awaiter(this, void 0, void 0, function* () {
         try {
-          const data = (0, json_to_pretty_yaml /* stringify */.P)(scores);
+          const data = (0, json_to_pretty_yaml /* stringify */.P)(games);
           const promise = (0, promises_namespaceObject.writeFile)(
             fileName,
             data
