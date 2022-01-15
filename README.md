@@ -23,7 +23,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Wordle
-        uses: katydecorah/wordle-to-yaml-action@0.2.0
+        uses: katydecorah/wordle-to-yaml-action@v0.2.0
       - name: Commit files
         run: |
           git config --local user.email "action@github.com"
@@ -55,9 +55,19 @@ The title of the issue should be include the game number and your score, example
 Wordle 210 3/6
 ```
 
-The body of the issue should only contain the emoji board, example:
+The body of the issue should contain the emoji board, examples:
 
 ```
+🟩⬛⬛⬛⬛
+⬛⬛🟨🟩🟨
+🟩🟩🟩🟩🟩
+```
+
+or
+
+```
+Wordle 210 3/6
+
 🟩⬛⬛⬛⬛
 ⬛⬛🟨🟩🟨
 🟩🟩🟩🟩🟩

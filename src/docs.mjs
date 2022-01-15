@@ -25,7 +25,10 @@ let yml = readFileSync("./.github/workflows/wordle.yml", "utf8");
 // TODO: clean this up!
 writeDocs(
   `\`\`\`yml
-${yml.replace("uses: ./", `uses: katydecorah/wordle-to-yaml-action@${version}`)}
+${yml.replace(
+  "uses: ./",
+  `uses: katydecorah/wordle-to-yaml-action@v${version}`
+)}
 \`\`\`
 `,
   "SETUP"
