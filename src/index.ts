@@ -95,9 +95,13 @@ export function parseGame(
 }
 
 function checkBoard(body: string) {
-  const board = body.split("\n").map((row) => row.replace(/\r/, ""));
+  const board = body
+    .split("\n")
+    .map((row) => row.replace(/\r/, "").trim())
+    .filter(String)
+    .filter((row) => !row.startsWith("Wordle"));
   if (!board.length || board.length < 1 || board.length > 6)
-    throw new Error("Wordle board is invalid");
+    throw new Error(`Wordle board is invalid: ${JSON.stringify(board)}`);
   return board as Board;
 }
 
