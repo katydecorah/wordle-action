@@ -1,12 +1,12 @@
 # wordle-to-yaml-action
 
-Save Wordle score to yaml from a GitHub issue.
+Save Wordle scores to a YAML file.
 
-## Set up
+<!-- START GENERATED DOCUMENTATION -->
 
-Create `.github/workflows/wordle.yml` file using the following template:
+## Set up the workflow
 
-<!-- START GENERATED SETUP -->
+To use this action, create a new workflow in `.github/workflows` and modify it as needed:
 
 ```yml
 on:
@@ -37,17 +37,13 @@ jobs:
           comment: "Added ${{ env.WordleSummary }}"
 ```
 
-<!-- END GENERATED SETUP -->
-
-## Options
-
-<!-- START GENERATED OPTIONS -->
+## Action options
 
 - `wordleFileName`: The file where you want to save your Wordle scores. Default: `_data/wordle.yml`.
 
-<!-- END GENERATED OPTIONS -->
+<!-- END GENERATED DOCUMENTATION -->
 
-## Creating an issue
+## Create an issue
 
 The title of the issue should be include the game number and your score, example:
 
@@ -67,7 +63,6 @@ or
 
 ```
 Wordle 210 3/6
-
 🟩⬛⬛⬛⬛
 ⬛⬛🟨🟩🟨
 🟩🟩🟩🟩🟩
