@@ -2,6 +2,23 @@
 
 Save Wordle scores to a YAML file.
 
+## Example output
+
+```yaml
+- number: 210
+  score: 3
+  board:
+    - "🟩⬛⬛⬛⬛"
+    - "⬛⬛🟨🟩🟨"
+    - "🟩🟩🟩🟩🟩"
+  boardWords:
+    - "yes no no no no"
+    - "no no almost yes almost"
+    - "yes yes yes yes yes"
+  won: true
+  date: "2022-01-15"
+```
+
 <!-- START GENERATED DOCUMENTATION -->
 
 ## Set up the workflow
