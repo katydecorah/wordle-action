@@ -5,7 +5,13 @@ export default function parseGame(
   title: string,
   body: string
 ):
-  | { gameNumber: number; score: Score; won: boolean; board: Board }
+  | {
+      gameNumber: number;
+      score: Score;
+      won: boolean;
+      board: Board;
+      boardWords: Board;
+    }
   | undefined {
   const split = title.split(" ");
   if (!split || split.length !== 3) {
@@ -14,7 +20,7 @@ export default function parseGame(
   const gameNumber = parseInt(split[1]);
   const score = split[2][0] === "X" ? "X" : parseInt(split[2][0]);
   const board = checkBoard(body);
-  const boardWords = board.map((r) => emojiToWord(r));
+  const boardWords = board.map(emojiToWord);
   return {
     gameNumber,
     score,

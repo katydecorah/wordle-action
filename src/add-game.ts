@@ -12,7 +12,7 @@ export default async function addGame({
   gameNumber: number;
   score: Score;
   board: Board;
-  bordWords: Board;
+  boardWords: Board;
   fileName: string;
   won: boolean;
 }) {
