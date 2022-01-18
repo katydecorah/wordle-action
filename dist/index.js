@@ -10878,6 +10878,7 @@
     // EXPORTS
     __nccwpck_require__.d(__webpack_exports__, {
       default: () => /* binding */ src,
+      wordle: () => /* binding */ wordle,
     });
 
     // EXTERNAL MODULE: ./node_modules/@actions/core/lib/core.js
@@ -10886,6 +10887,9 @@
     var github = __nccwpck_require__(5438); // CONCATENATED MODULE: ./src/parse-game.ts
     function parseGame(title, body) {
       const split = title.split(" ");
+      if (!split || split.length !== 3) {
+        return;
+      }
       const gameNumber = parseInt(split[1]);
       const score = split[2][0] === "X" ? "X" : parseInt(split[2][0]);
       const board = checkBoard(body);
@@ -15524,27 +15528,28 @@
       return src_awaiter(this, void 0, void 0, function* () {
         try {
           if (!github.context.payload.issue) {
-            throw new Error("Cannot find GitHub issue");
+            (0, core.setFailed)("Cannot find GitHub issue");
+            return;
           }
           const { title, number, body } = github.context.payload.issue;
           if (!title || !body) {
-            throw new Error("Unable to parse GitHub issue.");
+            (0, core.setFailed)("Unable to parse GitHub issue.");
+            return;
           }
           (0, core.exportVariable)("IssueNumber", number);
-          const { gameNumber, score, board, won } = parseGame(title, body);
-          if (!gameNumber || !score || !body) {
-            throw new Error("Could not parse GitHub Issue");
+          const formattedGame = parseGame(title, body);
+          if (formattedGame === undefined) {
+            (0, core.setFailed)(
+              "The GitHub Issue title is not in the correct format. Must be: `Wordle ### #/#`"
+            );
+            return;
           }
           (0,
-          core.exportVariable)("WordleSummary", `Wordle ${gameNumber} ${score}/6`);
+          core.exportVariable)("WordleSummary", `Wordle ${formattedGame.gameNumber} ${formattedGame.score}/6`);
           const fileName = (0, core.getInput)("wordleFileName");
-          const games = yield addGame({
-            gameNumber,
-            score,
-            board,
-            fileName,
-            won,
-          });
+          const games = yield addGame(
+            Object.assign(Object.assign({}, formattedGame), { fileName })
+          );
           yield returnWriteFile(fileName, games);
         } catch (error) {
           (0, core.setFailed)(error.message);

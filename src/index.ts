@@ -17,28 +17,33 @@ export type Game = {
 };
 export type SquareEmoji = "⬜" | "⬛" | "🟨" | "🟩";
 
-async function wordle() {
+export async function wordle() {
   try {
     if (!github.context.payload.issue) {
-      throw new Error("Cannot find GitHub issue");
+      setFailed("Cannot find GitHub issue");
+      return;
     }
     const { title, number, body } = github.context.payload.issue;
     if (!title || !body) {
-      throw new Error("Unable to parse GitHub issue.");
+      setFailed("Unable to parse GitHub issue.");
+      return;
     }
     exportVariable("IssueNumber", number);
-    const { gameNumber, score, board, won } = parseGame(title, body);
-    if (!gameNumber || !score || !body) {
-      throw new Error("Could not parse GitHub Issue");
+    const formattedGame = parseGame(title, body);
+    if (formattedGame === undefined) {
+      setFailed(
+        "The GitHub Issue title is not in the correct format. Must be: `Wordle ### #/#`"
+      );
+      return;
     }
-    exportVariable("WordleSummary", `Wordle ${gameNumber} ${score}/6`);
+    exportVariable(
+      "WordleSummary",
+      `Wordle ${formattedGame.gameNumber} ${formattedGame.score}/6`
+    );
     const fileName: string = getInput("wordleFileName");
     const games = (await addGame({
-      gameNumber,
-      score,
-      board,
+      ...formattedGame,
       fileName,
-      won,
     })) as Game[];
     await returnWriteFile(fileName, games);
   } catch (error) {

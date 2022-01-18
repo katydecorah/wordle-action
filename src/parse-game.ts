@@ -4,8 +4,13 @@ import { setFailed } from "@actions/core";
 export default function parseGame(
   title: string,
   body: string
-): { gameNumber: number; score: Score; won: boolean; board: Board } {
+):
+  | { gameNumber: number; score: Score; won: boolean; board: Board }
+  | undefined {
   const split = title.split(" ");
+  if (!split || split.length !== 3) {
+    return;
+  }
   const gameNumber = parseInt(split[1]);
   const score = split[2][0] === "X" ? "X" : parseInt(split[2][0]);
   const board = checkBoard(body);
