@@ -5,6 +5,11 @@ jest.mock("../to-json", () => {
   return jest.fn(() => [
     {
       board: ["🟩⬛⬛⬛⬛", "⬛⬛🟨🟩🟨", "🟩🟩🟩🟩🟩"],
+      boardWords: [
+        "yes no no no no",
+        "no no almost yes almost",
+        "yes yes yes yes yes",
+      ],
       date: "2022-01-17",
       number: 209,
       score: 3,
@@ -15,6 +20,11 @@ jest.mock("../to-json", () => {
 
 const sample = {
   board: ["🟩⬛⬛⬛⬛", "⬛⬛🟨🟩🟨", "🟩🟩🟩🟩🟩"],
+  boardWords: [
+    "yes no no no no",
+    "no no almost yes almost",
+    "yes yes yes yes yes",
+  ],
   gameNumber: 210,
   score: 3,
   won: true,
@@ -31,6 +41,11 @@ describe("addGame", () => {
             "⬛⬛🟨🟩🟨",
             "🟩🟩🟩🟩🟩",
           ],
+          "boardWords": Array [
+            "yes no no no no",
+            "no no almost yes almost",
+            "yes yes yes yes yes",
+          ],
           "date": "2022-01-17",
           "number": 209,
           "score": 3,
@@ -41,6 +56,11 @@ describe("addGame", () => {
             "🟩⬛⬛⬛⬛",
             "⬛⬛🟨🟩🟨",
             "🟩🟩🟩🟩🟩",
+          ],
+          "boardWords": Array [
+            "yes no no no no",
+            "no no almost yes almost",
+            "yes yes yes yes yes",
           ],
           "date": "2022-01-18",
           "number": 210,

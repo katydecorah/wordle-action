@@ -10893,11 +10893,13 @@
       const gameNumber = parseInt(split[1]);
       const score = split[2][0] === "X" ? "X" : parseInt(split[2][0]);
       const board = checkBoard(body);
+      const boardWords = board.map(emojiToWord);
       return {
         gameNumber,
         score,
         won: score !== "X",
         board,
+        boardWords,
       };
     }
     function checkBoard(body) {
@@ -10912,6 +10914,16 @@
         );
       }
       return board;
+    }
+    function emojiToWord(row) {
+      return row
+        .replace(/🟩/g, "yes ")
+        .replace(/🟦/g, "yes ")
+        .replace(/⬛/g, "no ")
+        .replace(/⬜/g, "no ")
+        .replace(/🟨/g, "almost ")
+        .replace(/🟧/g, "almost ")
+        .trim();
     } // CONCATENATED MODULE: external "fs/promises"
 
     const promises_namespaceObject = require("fs/promises");
@@ -15476,13 +15488,14 @@
         });
       };
 
-    function addGame({ gameNumber, score, board, fileName, won }) {
+    function addGame({ gameNumber, score, board, boardWords, fileName, won }) {
       return add_game_awaiter(this, void 0, void 0, function* () {
         const wordleJson = yield toJson(fileName);
         wordleJson.push({
           number: gameNumber,
           score,
           board,
+          boardWords,
           won,
           date: new Date().toISOString().slice(0, 10),
         });

@@ -52,36 +52,43 @@ describe("index", () => {
     );
     expect(setFailed).not.toHaveBeenCalledWith();
     expect(returnWriteFile.mock.calls[0]).toMatchInlineSnapshot(`
-    Array [
-      "oh-my-wordle.yml",
       Array [
-        Object {
-          "board": Array [
-            "🟩⬛⬛⬛⬛",
-            "⬛⬛🟨🟩🟨",
-            "🟩🟩🟩🟩🟩",
-          ],
-          "date": "2022-01-15",
-          "number": 210,
-          "score": 3,
-          "won": true,
-        },
-        Object {
-          "board": Array [
-            "🟩⬛🟨⬛⬛",
-            "🟩🟩⬛⬛⬛",
-            "🟩🟩⬛🟨⬛",
-            "🟩🟩🟩🟨⬛",
-            "🟩🟩🟩🟩🟩",
-          ],
-          "date": "2022-01-18",
-          "number": 213,
-          "score": 5,
-          "won": true,
-        },
-      ],
-    ]
-  `);
+        "oh-my-wordle.yml",
+        Array [
+          Object {
+            "board": Array [
+              "🟩⬛⬛⬛⬛",
+              "⬛⬛🟨🟩🟨",
+              "🟩🟩🟩🟩🟩",
+            ],
+            "date": "2022-01-15",
+            "number": 210,
+            "score": 3,
+            "won": true,
+          },
+          Object {
+            "board": Array [
+              "🟩⬛🟨⬛⬛",
+              "🟩🟩⬛⬛⬛",
+              "🟩🟩⬛🟨⬛",
+              "🟩🟩🟩🟨⬛",
+              "🟩🟩🟩🟩🟩",
+            ],
+            "boardWords": Array [
+              "yes no almost no no",
+              "yes yes no no no",
+              "yes yes no almost no",
+              "yes yes yes almost no",
+              "yes yes yes yes yes",
+            ],
+            "date": "2022-01-18",
+            "number": 213,
+            "score": 5,
+            "won": true,
+          },
+        ],
+      ]
+    `);
   });
 
   test("error, no payload", async () => {

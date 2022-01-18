@@ -6,12 +6,13 @@ import parseGame from "./parse-game";
 import returnWriteFile from "./write-file";
 import addGame from "./add-game";
 
-export type Board = [string, string?, string?, string?, string?, string?];
+export type Board = string[];
 export type Score = number | string;
 export type Game = {
   number: number;
   score: Score;
   board: Board;
+  boardWords: Board;
   date: string;
   won: boolean;
 };
