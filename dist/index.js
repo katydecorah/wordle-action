@@ -10877,18 +10877,139 @@
 
     // EXPORTS
     __nccwpck_require__.d(__webpack_exports__, {
-      addGame: () => /* binding */ addGame,
       default: () => /* binding */ src,
-      parseGame: () => /* binding */ parseGame,
-      returnReadFile: () => /* binding */ returnReadFile,
-      returnWriteFile: () => /* binding */ returnWriteFile,
-      toJson: () => /* binding */ toJson,
     });
 
     // EXTERNAL MODULE: ./node_modules/@actions/core/lib/core.js
     var core = __nccwpck_require__(2186);
     // EXTERNAL MODULE: ./node_modules/@actions/github/lib/github.js
-    var github = __nccwpck_require__(5438); // CONCATENATED MODULE: ./node_modules/js-yaml/dist/js-yaml.mjs
+    var github = __nccwpck_require__(5438); // CONCATENATED MODULE: ./src/parse-game.ts
+    function parseGame(title, body) {
+      const split = title.split(" ");
+      const gameNumber = parseInt(split[1]);
+      const score = split[2][0] === "X" ? "X" : parseInt(split[2][0]);
+      const board = checkBoard(body);
+      return {
+        gameNumber,
+        score,
+        won: score !== "X",
+        board,
+      };
+    }
+    function checkBoard(body) {
+      const board = body
+        .split("\n")
+        .map((row) => row.replace(/\r/, "").trim())
+        .filter(String)
+        .filter((row) => !row.startsWith("Wordle"));
+      if (!board.length || board.length < 1 || board.length > 6) {
+        (0, core.setFailed)(
+          `Wordle board is invalid: ${JSON.stringify(board)}`
+        );
+      }
+      return board;
+    } // CONCATENATED MODULE: external "fs/promises"
+
+    const promises_namespaceObject = require("fs/promises");
+    // EXTERNAL MODULE: ./node_modules/json-to-pretty-yaml/index.js
+    var json_to_pretty_yaml = __nccwpck_require__(6760); // CONCATENATED MODULE: ./src/write-file.ts
+    var __awaiter =
+      (undefined && undefined.__awaiter) ||
+      function (thisArg, _arguments, P, generator) {
+        function adopt(value) {
+          return value instanceof P
+            ? value
+            : new P(function (resolve) {
+                resolve(value);
+              });
+        }
+        return new (P || (P = Promise))(function (resolve, reject) {
+          function fulfilled(value) {
+            try {
+              step(generator.next(value));
+            } catch (e) {
+              reject(e);
+            }
+          }
+          function rejected(value) {
+            try {
+              step(generator["throw"](value));
+            } catch (e) {
+              reject(e);
+            }
+          }
+          function step(result) {
+            result.done
+              ? resolve(result.value)
+              : adopt(result.value).then(fulfilled, rejected);
+          }
+          step((generator = generator.apply(thisArg, _arguments || [])).next());
+        });
+      };
+
+    function returnWriteFile(fileName, games) {
+      return __awaiter(this, void 0, void 0, function* () {
+        try {
+          const data = (0, json_to_pretty_yaml /* stringify */.P)(games);
+          const promise = (0, promises_namespaceObject.writeFile)(
+            fileName,
+            data
+          );
+          yield promise;
+        } catch (error) {
+          (0, core.setFailed)(error.message);
+        }
+      });
+    } // CONCATENATED MODULE: ./src/read-file.ts
+
+    var read_file_awaiter =
+      (undefined && undefined.__awaiter) ||
+      function (thisArg, _arguments, P, generator) {
+        function adopt(value) {
+          return value instanceof P
+            ? value
+            : new P(function (resolve) {
+                resolve(value);
+              });
+        }
+        return new (P || (P = Promise))(function (resolve, reject) {
+          function fulfilled(value) {
+            try {
+              step(generator.next(value));
+            } catch (e) {
+              reject(e);
+            }
+          }
+          function rejected(value) {
+            try {
+              step(generator["throw"](value));
+            } catch (e) {
+              reject(e);
+            }
+          }
+          function step(result) {
+            result.done
+              ? resolve(result.value)
+              : adopt(result.value).then(fulfilled, rejected);
+          }
+          step((generator = generator.apply(thisArg, _arguments || [])).next());
+        });
+      };
+
+    function returnReadFile(fileName) {
+      return read_file_awaiter(this, void 0, void 0, function* () {
+        try {
+          const promise = (0, promises_namespaceObject.readFile)(
+            fileName,
+            "utf-8"
+          );
+          return yield promise;
+        } catch (error) {
+          (0, core.setFailed)(error.message);
+        }
+      });
+    } // CONCATENATED MODULE: ./node_modules/js-yaml/dist/js-yaml.mjs
+
     /*! js-yaml 4.1.0 https://github.com/nodeca/js-yaml @license MIT */
     function isNothing(subject) {
       return typeof subject === "undefined" || subject === null;
@@ -15270,12 +15391,102 @@
     };
 
     /* harmony default export */ const js_yaml =
-      /* unused pure expression or super */ null && jsYaml;
+      /* unused pure expression or super */ null && jsYaml; // CONCATENATED MODULE: ./src/to-json.ts
 
-    // EXTERNAL MODULE: ./node_modules/json-to-pretty-yaml/index.js
-    var json_to_pretty_yaml = __nccwpck_require__(6760); // CONCATENATED MODULE: external "fs/promises"
-    const promises_namespaceObject = require("fs/promises"); // CONCATENATED MODULE: ./src/index.ts
-    var __awaiter =
+    var to_json_awaiter =
+      (undefined && undefined.__awaiter) ||
+      function (thisArg, _arguments, P, generator) {
+        function adopt(value) {
+          return value instanceof P
+            ? value
+            : new P(function (resolve) {
+                resolve(value);
+              });
+        }
+        return new (P || (P = Promise))(function (resolve, reject) {
+          function fulfilled(value) {
+            try {
+              step(generator.next(value));
+            } catch (e) {
+              reject(e);
+            }
+          }
+          function rejected(value) {
+            try {
+              step(generator["throw"](value));
+            } catch (e) {
+              reject(e);
+            }
+          }
+          function step(result) {
+            result.done
+              ? resolve(result.value)
+              : adopt(result.value).then(fulfilled, rejected);
+          }
+          step((generator = generator.apply(thisArg, _arguments || [])).next());
+        });
+      };
+
+    function toJson(fileName) {
+      return to_json_awaiter(this, void 0, void 0, function* () {
+        try {
+          const contents = yield returnReadFile(fileName);
+          return load(contents);
+        } catch (error) {
+          (0, core.setFailed)(error.message);
+        }
+      });
+    } // CONCATENATED MODULE: ./src/add-game.ts
+
+    var add_game_awaiter =
+      (undefined && undefined.__awaiter) ||
+      function (thisArg, _arguments, P, generator) {
+        function adopt(value) {
+          return value instanceof P
+            ? value
+            : new P(function (resolve) {
+                resolve(value);
+              });
+        }
+        return new (P || (P = Promise))(function (resolve, reject) {
+          function fulfilled(value) {
+            try {
+              step(generator.next(value));
+            } catch (e) {
+              reject(e);
+            }
+          }
+          function rejected(value) {
+            try {
+              step(generator["throw"](value));
+            } catch (e) {
+              reject(e);
+            }
+          }
+          function step(result) {
+            result.done
+              ? resolve(result.value)
+              : adopt(result.value).then(fulfilled, rejected);
+          }
+          step((generator = generator.apply(thisArg, _arguments || [])).next());
+        });
+      };
+
+    function addGame({ gameNumber, score, board, fileName, won }) {
+      return add_game_awaiter(this, void 0, void 0, function* () {
+        const wordleJson = yield toJson(fileName);
+        wordleJson.push({
+          number: gameNumber,
+          score,
+          board,
+          won,
+          date: new Date().toISOString().slice(0, 10),
+        });
+        return wordleJson.sort((a, b) => a.number - b.number);
+      });
+    } // CONCATENATED MODULE: ./src/index.ts
+
+    var src_awaiter =
       (undefined && undefined.__awaiter) ||
       function (thisArg, _arguments, P, generator) {
         function adopt(value) {
@@ -15310,7 +15521,7 @@
       };
 
     function wordle() {
-      return __awaiter(this, void 0, void 0, function* () {
+      return src_awaiter(this, void 0, void 0, function* () {
         try {
           if (!github.context.payload.issue) {
             throw new Error("Cannot find GitHub issue");
@@ -15337,78 +15548,6 @@
           yield returnWriteFile(fileName, games);
         } catch (error) {
           (0, core.setFailed)(error.message);
-        }
-      });
-    }
-    function addGame({ gameNumber, score, board, fileName, won }) {
-      return __awaiter(this, void 0, void 0, function* () {
-        const wordleJson = yield toJson(fileName);
-        wordleJson.push({
-          number: gameNumber,
-          score,
-          board,
-          won,
-          date: new Date().toISOString().slice(0, 10),
-        });
-        return wordleJson.sort((a, b) => a.number - b.number);
-      });
-    }
-    function toJson(fileName) {
-      return __awaiter(this, void 0, void 0, function* () {
-        try {
-          const contents = yield returnReadFile(fileName);
-          return load(contents);
-        } catch (error) {
-          (0, core.setFailed)(error.message);
-        }
-      });
-    }
-    function parseGame(title, body) {
-      const split = title.split(" ");
-      const gameNumber = parseInt(split[1]);
-      const score = split[2][0] === "X" ? "X" : parseInt(split[2][0]);
-      const board = checkBoard(body);
-      return {
-        gameNumber,
-        score,
-        won: score !== "X",
-        board: board,
-      };
-    }
-    function checkBoard(body) {
-      const board = body
-        .split("\n")
-        .map((row) => row.replace(/\r/, "").trim())
-        .filter(String)
-        .filter((row) => !row.startsWith("Wordle"));
-      if (!board.length || board.length < 1 || board.length > 6)
-        throw new Error(`Wordle board is invalid: ${JSON.stringify(board)}`);
-      return board;
-    }
-    function returnReadFile(fileName) {
-      return __awaiter(this, void 0, void 0, function* () {
-        try {
-          const promise = (0, promises_namespaceObject.readFile)(
-            fileName,
-            "utf-8"
-          );
-          return yield promise;
-        } catch (error) {
-          (0, core.setFailed)(error);
-        }
-      });
-    }
-    function returnWriteFile(fileName, games) {
-      return __awaiter(this, void 0, void 0, function* () {
-        try {
-          const data = (0, json_to_pretty_yaml /* stringify */.P)(games);
-          const promise = (0, promises_namespaceObject.writeFile)(
-            fileName,
-            data
-          );
-          yield promise;
-        } catch (error) {
-          (0, core.setFailed)(error);
         }
       });
     }

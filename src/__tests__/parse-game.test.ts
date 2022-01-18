@@ -1,4 +1,7 @@
-import { parseGame } from "../index";
+import parseGame, { checkBoard } from "../parse-game";
+import { setFailed } from "@actions/core";
+
+jest.mock("@actions/core");
 
 describe("parseGame", () => {
   test("works", () => {
@@ -64,5 +67,31 @@ describe("parseGame", () => {
       score: 6,
       won: true,
     });
+  });
+});
+
+describe("checkBoard", () => {
+  test("works", () => {
+    expect(
+      checkBoard(`🟩⬛⬛⬛⬛
+⬛⬛🟨🟩🟨
+🟩🟩🟩🟩🟩`)
+    ).toEqual(["🟩⬛⬛⬛⬛", "⬛⬛🟨🟩🟨", "🟩🟩🟩🟩🟩"]);
+  });
+  test("error, no value", () => {
+    checkBoard(``);
+    expect(setFailed).toHaveBeenCalledWith("Wordle board is invalid: []");
+  });
+  test("error, too many rows", () => {
+    checkBoard(`🟩⬛⬛⬛⬛
+🟩⬛⬛⬛⬛
+🟩⬛⬛⬛⬛
+🟩⬛⬛⬛⬛
+🟩⬛⬛⬛⬛
+⬛⬛🟨🟩🟨
+🟩🟩🟩🟩🟩`);
+    expect(setFailed).toHaveBeenCalledWith(
+      'Wordle board is invalid: ["🟩⬛⬛⬛⬛","🟩⬛⬛⬛⬛","🟩⬛⬛⬛⬛","🟩⬛⬛⬛⬛","🟩⬛⬛⬛⬛","⬛⬛🟨🟩🟨","🟩🟩🟩🟩🟩"]'
+    );
   });
 });
