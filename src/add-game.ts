@@ -5,12 +5,14 @@ export default async function addGame({
   gameNumber,
   score,
   board,
+  boardWords,
   fileName,
   won,
 }: {
   gameNumber: number;
   score: Score;
   board: Board;
+  bordWords: Board;
   fileName: string;
   won: boolean;
 }) {
@@ -19,6 +21,7 @@ export default async function addGame({
     number: gameNumber,
     score,
     board,
+    boardWords,
     won,
     date: new Date().toISOString().slice(0, 10),
   });

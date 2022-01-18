@@ -14,11 +14,13 @@ export default function parseGame(
   const gameNumber = parseInt(split[1]);
   const score = split[2][0] === "X" ? "X" : parseInt(split[2][0]);
   const board = checkBoard(body);
+  const boardWords = board.map((r) => emojiToWord(r));
   return {
     gameNumber,
     score,
     won: score !== "X",
     board,
+    boardWords,
   };
 }
 
@@ -32,4 +34,15 @@ export function checkBoard(body: string): Board {
     setFailed(`Wordle board is invalid: ${JSON.stringify(board)}`);
   }
   return board as Board;
+}
+
+export function emojiToWord(row: string) {
+  return row
+    .replace(/🟩/g, "yes ")
+    .replace(/🟦/g, "yes ")
+    .replace(/⬛/g, "no ")
+    .replace(/⬜/g, "no ")
+    .replace(/🟨/g, "almost ")
+    .replace(/🟧/g, "almost ")
+    .trim();
 }
