@@ -2,125 +2,52 @@
 
 import { getInput, exportVariable, setFailed } from "@actions/core";
 import * as github from "@actions/github";
-import { load } from "js-yaml";
-import { stringify } from "json-to-pretty-yaml";
-import { readFile, writeFile } from "fs/promises";
+import parseGame from "./parse-game";
+import returnWriteFile from "./write-file";
+import addGame from "./add-game";
 
-type Board = [string, string?, string?, string?, string?, string?];
-type Score = number | string;
-type Game = {
+export type Board = [string, string?, string?, string?, string?, string?];
+export type Score = number | string;
+export type Game = {
   number: number;
   score: Score;
   board: Board;
   date: string;
   won: boolean;
 };
+export type SquareEmoji = "⬜" | "⬛" | "🟨" | "🟩";
 
-async function wordle() {
+export async function wordle() {
   try {
     if (!github.context.payload.issue) {
-      throw new Error("Cannot find GitHub issue");
+      setFailed("Cannot find GitHub issue");
+      return;
     }
     const { title, number, body } = github.context.payload.issue;
     if (!title || !body) {
-      throw new Error("Unable to parse GitHub issue.");
+      setFailed("Unable to parse GitHub issue.");
+      return;
     }
     exportVariable("IssueNumber", number);
-    const { gameNumber, score, board, won } = parseGame(title, body);
-    if (!gameNumber || !score || !body) {
-      throw new Error("Could not parse GitHub Issue");
+    const formattedGame = parseGame(title, body);
+    if (formattedGame === undefined) {
+      setFailed(
+        "The GitHub Issue title is not in the correct format. Must be: `Wordle ### #/#`"
+      );
+      return;
     }
-    exportVariable("WordleSummary", `Wordle ${gameNumber} ${score}/6`);
+    exportVariable(
+      "WordleSummary",
+      `Wordle ${formattedGame.gameNumber} ${formattedGame.score}/6`
+    );
     const fileName: string = getInput("wordleFileName");
     const games = (await addGame({
-      gameNumber,
-      score,
-      board,
+      ...formattedGame,
       fileName,
-      won,
     })) as Game[];
     await returnWriteFile(fileName, games);
   } catch (error) {
     setFailed(error.message);
-  }
-}
-
-export async function addGame({
-  gameNumber,
-  score,
-  board,
-  fileName,
-  won,
-}: {
-  gameNumber: number;
-  score: Score;
-  board: Board;
-  fileName: string;
-  won: boolean;
-}) {
-  const wordleJson = (await toJson(fileName)) as Game[];
-  wordleJson.push({
-    number: gameNumber,
-    score,
-    board,
-    won,
-    date: new Date().toISOString().slice(0, 10),
-  });
-  return wordleJson.sort((a, b) => a.number - b.number);
-}
-
-export async function toJson(fileName: string) {
-  try {
-    const contents = (await returnReadFile(fileName)) as string;
-    return load(contents);
-  } catch (error) {
-    setFailed(error.message);
-  }
-}
-
-export function parseGame(
-  title: string,
-  body: string
-): { gameNumber: number; score: Score; won: boolean; board: Board } {
-  const split = title.split(" ");
-  const gameNumber = parseInt(split[1]);
-  const score = split[2][0] === "X" ? "X" : parseInt(split[2][0]);
-  const board = checkBoard(body);
-  return {
-    gameNumber,
-    score,
-    won: score !== "X",
-    board: board,
-  };
-}
-
-function checkBoard(body: string) {
-  const board = body
-    .split("\n")
-    .map((row) => row.replace(/\r/, "").trim())
-    .filter(String)
-    .filter((row) => !row.startsWith("Wordle"));
-  if (!board.length || board.length < 1 || board.length > 6)
-    throw new Error(`Wordle board is invalid: ${JSON.stringify(board)}`);
-  return board as Board;
-}
-
-export async function returnReadFile(fileName: string) {
-  try {
-    const promise = readFile(fileName, "utf-8");
-    return await promise;
-  } catch (error) {
-    setFailed(error);
-  }
-}
-
-export async function returnWriteFile(fileName: string, games: Game[]) {
-  try {
-    const data = stringify(games);
-    const promise = writeFile(fileName, data);
-    await promise;
-  } catch (error) {
-    setFailed(error);
   }
 }
 
