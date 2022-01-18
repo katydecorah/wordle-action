@@ -45,7 +45,7 @@ jobs:
 
 ## Create an issue
 
-The title of the issue should be include the game number and your score, example:
+The title of the issue should include the game number and your score, example:
 
 ```
 Wordle 210 3/6
