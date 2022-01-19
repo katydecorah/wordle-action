@@ -1,6 +1,6 @@
 # wordle-to-yaml-action
 
-Save Wordle scores to a YAML file.
+Save Wordle scores to a YAML file. Pair it with the [iOS Shortcut](shortcut/Wordle to yaml.shortcut) to automatically format and open the GitHub issue.
 
 ## Example output
 
