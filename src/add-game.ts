@@ -6,6 +6,7 @@ export default async function addGame({
   score,
   board,
   boardWords,
+  altText,
   fileName,
   won,
 }: {
@@ -13,6 +14,7 @@ export default async function addGame({
   score: Score;
   board: Board;
   boardWords: Board;
+  altText: string[];
   fileName: string;
   won: boolean;
 }) {
@@ -22,6 +24,7 @@ export default async function addGame({
     score,
     board,
     boardWords,
+    altText,
     won,
     date: new Date().toISOString().slice(0, 10),
   });

@@ -9,6 +9,7 @@ export default function parseGame(
   won: boolean;
   board: Board;
   boardWords: Board;
+  altText: string[];
 } {
   try {
     const split = title.split(" ");
@@ -20,13 +21,16 @@ export default function parseGame(
     const gameNumber = parseInt(split[1]);
     const score = split[2][0] === "X" ? "X" : parseInt(split[2][0]);
     const board = checkBoard(body);
+    const won = score !== "X";
     const boardWords = board.map(emojiToWord);
+    const altText = boardToAltText(boardWords, won);
     return {
       gameNumber,
       score,
-      won: score !== "X",
+      won,
       board,
       boardWords,
+      altText,
     };
   } catch (error) {
     throw new Error(error);
@@ -54,4 +58,42 @@ export function emojiToWord(row: string) {
     .replace(/🟨/g, "almost ")
     .replace(/🟧/g, "almost ")
     .trim();
+}
+
+export function boardToAltText(boardWords: string[], won: boolean) {
+  const position = {
+    0: "first",
+    1: "second",
+    2: "third",
+    3: "fourth",
+    4: "fifth",
+    5: "sixth",
+  };
+
+  const status = {
+    no: "not in the word.",
+    yes: "correct.",
+    almost: "in the word, but in the incorrect spot.",
+  };
+
+  const describedRows = boardWords.map((row, index) => {
+    const wonWithLastGuess = won && index === boardWords.length - 1;
+    const describeRow = `${row
+      .split(" ")
+      .map((l, p) => `The ${position[p]} letter is ${status[l]}`)
+      .join(" ")}`;
+    return `In the ${position[index]} guess: ${
+      wonWithLastGuess ? "All letters are correct." : describeRow
+    }`;
+  });
+  const luckyGuess = boardWords.length === 1 && won;
+  const gameStatus = won ? "won" : "lost";
+  const gameGuesses = won
+    ? ` in ${boardWords.length} guess${boardWords.length === 1 ? "" : "es"}`
+    : "";
+
+  return [
+    `The player ${gameStatus} the game${gameGuesses}.`,
+    ...(luckyGuess ? [] : [...describedRows]),
+  ];
 }

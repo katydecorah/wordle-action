@@ -8742,13 +8742,16 @@ function parseGame(title, body) {
         const gameNumber = parseInt(split[1]);
         const score = split[2][0] === "X" ? "X" : parseInt(split[2][0]);
         const board = checkBoard(body);
+        const won = score !== "X";
         const boardWords = board.map(emojiToWord);
+        const altText = boardToAltText(boardWords, won);
         return {
             gameNumber,
             score,
-            won: score !== "X",
+            won,
             board,
             boardWords,
+            altText,
         };
     }
     catch (error) {
@@ -8775,6 +8778,38 @@ function emojiToWord(row) {
         .replace(/🟨/g, "almost ")
         .replace(/🟧/g, "almost ")
         .trim();
+}
+function boardToAltText(boardWords, won) {
+    const position = {
+        0: "first",
+        1: "second",
+        2: "third",
+        3: "fourth",
+        4: "fifth",
+        5: "sixth",
+    };
+    const status = {
+        no: "not in the word.",
+        yes: "correct.",
+        almost: "in the word, but in the incorrect spot.",
+    };
+    const describedRows = boardWords.map((row, index) => {
+        const wonWithLastGuess = won && index === boardWords.length - 1;
+        const describeRow = `${row
+            .split(" ")
+            .map((l, p) => `The ${position[p]} letter is ${status[l]}`)
+            .join(" ")}`;
+        return `In the ${position[index]} guess: ${wonWithLastGuess ? "All letters are correct." : describeRow}`;
+    });
+    const luckyGuess = boardWords.length === 1 && won;
+    const gameStatus = won ? "won" : "lost";
+    const gameGuesses = won
+        ? ` in ${boardWords.length} guess${boardWords.length === 1 ? "" : "es"}`
+        : "";
+    return [
+        `The player ${gameStatus} the game${gameGuesses}.`,
+        ...(luckyGuess ? [] : [...describedRows]),
+    ];
 }
 
 ;// CONCATENATED MODULE: external "fs/promises"
@@ -12717,7 +12752,7 @@ var add_game_awaiter = (undefined && undefined.__awaiter) || function (thisArg, 
     });
 };
 
-function addGame({ gameNumber, score, board, boardWords, fileName, won, }) {
+function addGame({ gameNumber, score, board, boardWords, altText, fileName, won, }) {
     return add_game_awaiter(this, void 0, void 0, function* () {
         const wordleJson = (yield toJson(fileName));
         wordleJson.push({
@@ -12725,6 +12760,7 @@ function addGame({ gameNumber, score, board, boardWords, fileName, won, }) {
             score,
             board,
             boardWords,
+            altText,
             won,
             date: new Date().toISOString().slice(0, 10),
         });
