@@ -1,5 +1,4 @@
 import toJson from "../to-json";
-import { setFailed } from "@actions/core";
 
 jest.mock("@actions/core");
 
@@ -14,8 +13,7 @@ describe("toJson", () => {
     expect(await toJson("my-file.yml")).toEqual([{ gameNumber: 100 }]);
   });
   test("error", async () => {
-    mockRead = Promise.reject({ message: "Error" });
-    await toJson("my-file.yml");
-    expect(setFailed).toHaveBeenCalledWith("Error");
+    mockRead = Promise.reject("Error");
+    await expect(toJson("my-file.yml")).rejects.toThrow("Error");
   });
 });

@@ -10886,21 +10886,27 @@
     // EXTERNAL MODULE: ./node_modules/@actions/github/lib/github.js
     var github = __nccwpck_require__(5438); // CONCATENATED MODULE: ./src/parse-game.ts
     function parseGame(title, body) {
-      const split = title.split(" ");
-      if (!split || split.length !== 3) {
-        return;
+      try {
+        const split = title.split(" ");
+        if (!split || split.length !== 3) {
+          throw new Error(
+            "The GitHub Issue title is not in the correct format. Must be: `Wordle ### #/#`"
+          );
+        }
+        const gameNumber = parseInt(split[1]);
+        const score = split[2][0] === "X" ? "X" : parseInt(split[2][0]);
+        const board = checkBoard(body);
+        const boardWords = board.map(emojiToWord);
+        return {
+          gameNumber,
+          score,
+          won: score !== "X",
+          board,
+          boardWords,
+        };
+      } catch (error) {
+        throw new Error(error);
       }
-      const gameNumber = parseInt(split[1]);
-      const score = split[2][0] === "X" ? "X" : parseInt(split[2][0]);
-      const board = checkBoard(body);
-      const boardWords = board.map(emojiToWord);
-      return {
-        gameNumber,
-        score,
-        won: score !== "X",
-        board,
-        boardWords,
-      };
     }
     function checkBoard(body) {
       const board = body
@@ -10909,9 +10915,7 @@
         .filter(String)
         .filter((row) => !row.startsWith("Wordle"));
       if (!board.length || board.length < 1 || board.length > 6) {
-        (0, core.setFailed)(
-          `Wordle board is invalid: ${JSON.stringify(board)}`
-        );
+        throw new Error(`Wordle board is invalid: ${JSON.stringify(board)}`);
       }
       return board;
     }
@@ -10973,7 +10977,7 @@
           );
           yield promise;
         } catch (error) {
-          (0, core.setFailed)(error.message);
+          throw new Error(error);
         }
       });
     } // CONCATENATED MODULE: ./src/read-file.ts
@@ -11021,7 +11025,7 @@
           );
           return yield promise;
         } catch (error) {
-          (0, core.setFailed)(error.message);
+          throw new Error(error);
         }
       });
     } // CONCATENATED MODULE: ./node_modules/js-yaml/dist/js-yaml.mjs
@@ -15449,7 +15453,7 @@
           const contents = yield returnReadFile(fileName);
           return load(contents);
         } catch (error) {
-          (0, core.setFailed)(error.message);
+          throw new Error(error);
         }
       });
     } // CONCATENATED MODULE: ./src/add-game.ts
@@ -15546,17 +15550,10 @@
           }
           const { title, number, body } = github.context.payload.issue;
           if (!title || !body) {
-            (0, core.setFailed)("Unable to parse GitHub issue.");
-            return;
+            throw new Error("Unable to parse GitHub issue.");
           }
           (0, core.exportVariable)("IssueNumber", number);
           const formattedGame = parseGame(title, body);
-          if (formattedGame === undefined) {
-            (0, core.setFailed)(
-              "The GitHub Issue title is not in the correct format. Must be: `Wordle ### #/#`"
-            );
-            return;
-          }
           (0,
           core.exportVariable)("WordleSummary", `Wordle ${formattedGame.gameNumber} ${formattedGame.score}/6`);
           const fileName = (0, core.getInput)("wordleFileName");

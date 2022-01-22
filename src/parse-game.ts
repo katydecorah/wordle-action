@@ -1,33 +1,36 @@
 import { Score, Board } from "./index";
-import { setFailed } from "@actions/core";
 
 export default function parseGame(
   title: string,
   body: string
-):
-  | {
-      gameNumber: number;
-      score: Score;
-      won: boolean;
-      board: Board;
-      boardWords: Board;
+): {
+  gameNumber: number;
+  score: Score;
+  won: boolean;
+  board: Board;
+  boardWords: Board;
+} {
+  try {
+    const split = title.split(" ");
+    if (!split || split.length !== 3) {
+      throw new Error(
+        "The GitHub Issue title is not in the correct format. Must be: `Wordle ### #/#`"
+      );
     }
-  | undefined {
-  const split = title.split(" ");
-  if (!split || split.length !== 3) {
-    return;
+    const gameNumber = parseInt(split[1]);
+    const score = split[2][0] === "X" ? "X" : parseInt(split[2][0]);
+    const board = checkBoard(body);
+    const boardWords = board.map(emojiToWord);
+    return {
+      gameNumber,
+      score,
+      won: score !== "X",
+      board,
+      boardWords,
+    };
+  } catch (error) {
+    throw new Error(error);
   }
-  const gameNumber = parseInt(split[1]);
-  const score = split[2][0] === "X" ? "X" : parseInt(split[2][0]);
-  const board = checkBoard(body);
-  const boardWords = board.map(emojiToWord);
-  return {
-    gameNumber,
-    score,
-    won: score !== "X",
-    board,
-    boardWords,
-  };
 }
 
 export function checkBoard(body: string): Board {
@@ -37,7 +40,7 @@ export function checkBoard(body: string): Board {
     .filter(String)
     .filter((row) => !row.startsWith("Wordle"));
   if (!board.length || board.length < 1 || board.length > 6) {
-    setFailed(`Wordle board is invalid: ${JSON.stringify(board)}`);
+    throw new Error(`Wordle board is invalid: ${JSON.stringify(board)}`);
   }
   return board as Board;
 }

@@ -1,3 +1,4 @@
+/* eslint-disable no-import-assign */
 import { wordle } from "../index";
 import * as github from "@actions/github";
 import { setFailed, exportVariable } from "@actions/core";
@@ -120,7 +121,7 @@ describe("index", () => {
     });
     await wordle();
     expect(setFailed).toHaveBeenCalledWith(
-      'Wordle board is invalid: ["🟩⬛🟨⬛⬛","🟩🟩⬛⬛⬛","🟩🟩⬛⬛⬛","🟩🟩⬛⬛⬛","🟩🟩⬛🟨⬛","🟩🟩🟩🟨⬛","🟩🟩🟩🟩🟩"]'
+      'Error: Wordle board is invalid: ["🟩⬛🟨⬛⬛","🟩🟩⬛⬛⬛","🟩🟩⬛⬛⬛","🟩🟩⬛⬛⬛","🟩🟩⬛🟨⬛","🟩🟩🟩🟨⬛","🟩🟩🟩🟩🟩"]'
     );
   });
 
@@ -137,20 +138,7 @@ describe("index", () => {
     });
     await wordle();
     expect(setFailed).toHaveBeenCalledWith(
-      "The GitHub Issue title is not in the correct format. Must be: `Wordle ### #/#`"
+      "Error: The GitHub Issue title is not in the correct format. Must be: `Wordle ### #/#`"
     );
-  });
-
-  test("error, function throws", async () => {
-    mockReadFile = Promise.reject({ message: "Error" });
-    Object.defineProperty(github, "context", {
-      value: {
-        payload: {
-          issue: goodIsue,
-        },
-      },
-    });
-    await wordle();
-    expect(setFailed).toHaveBeenCalledWith("Error");
   });
 });
