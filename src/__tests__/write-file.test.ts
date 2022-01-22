@@ -1,5 +1,4 @@
 import returnWriteFile from "../write-file";
-import { setFailed } from "@actions/core";
 import { writeFile } from "fs/promises";
 
 jest.mock("@actions/core");
@@ -28,8 +27,7 @@ describe("returnWriteFile", () => {
     `);
   });
   test("error", async () => {
-    mockWriteFile = Promise.reject({ message: "Error" });
-    await returnWriteFile("my-file.yml", []);
-    expect(setFailed).toHaveBeenCalledWith("Error");
+    mockWriteFile = Promise.reject("Error");
+    await expect(returnWriteFile("my-file.yml", [])).rejects.toThrow("Error");
   });
 });

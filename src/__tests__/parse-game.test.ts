@@ -1,5 +1,4 @@
 import parseGame, { checkBoard, emojiToWord } from "../parse-game";
-import { setFailed } from "@actions/core";
 
 jest.mock("@actions/core");
 
@@ -100,18 +99,18 @@ describe("checkBoard", () => {
     ).toEqual(["🟩⬛⬛⬛⬛", "⬛⬛🟨🟩🟨", "🟩🟩🟩🟩🟩"]);
   });
   test("error, no value", () => {
-    checkBoard(``);
-    expect(setFailed).toHaveBeenCalledWith("Wordle board is invalid: []");
+    expect(() => checkBoard(``)).toThrow("Wordle board is invalid: []");
   });
   test("error, too many rows", () => {
-    checkBoard(`🟩⬛⬛⬛⬛
+    expect(() =>
+      checkBoard(`🟩⬛⬛⬛⬛
 🟩⬛⬛⬛⬛
 🟩⬛⬛⬛⬛
 🟩⬛⬛⬛⬛
 🟩⬛⬛⬛⬛
 ⬛⬛🟨🟩🟨
-🟩🟩🟩🟩🟩`);
-    expect(setFailed).toHaveBeenCalledWith(
+🟩🟩🟩🟩🟩`)
+    ).toThrow(
       'Wordle board is invalid: ["🟩⬛⬛⬛⬛","🟩⬛⬛⬛⬛","🟩⬛⬛⬛⬛","🟩⬛⬛⬛⬛","🟩⬛⬛⬛⬛","⬛⬛🟨🟩🟨","🟩🟩🟩🟩🟩"]'
     );
   });
