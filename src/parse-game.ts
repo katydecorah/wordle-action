@@ -73,7 +73,7 @@ export function boardToAltText(boardWords: string[], won: boolean) {
   const status = {
     no: "not in the word.",
     yes: "correct.",
-    almost: "in the word, but in the incorrect spot.",
+    almost: "in the word, but in the wrong spot.",
   };
 
   const describedRows = boardWords.map((row, index) => {

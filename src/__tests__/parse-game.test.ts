@@ -19,7 +19,7 @@ describe("parseGame", () => {
       altText: [
         "The player won the game in 3 guesses.",
         "In the first guess: The first letter is correct. The second letter is not in the word. The third letter is not in the word. The fourth letter is not in the word. The fifth letter is not in the word.",
-        "In the second guess: The first letter is not in the word. The second letter is not in the word. The third letter is in the word, but in the incorrect spot. The fourth letter is correct. The fifth letter is in the word, but in the incorrect spot.",
+        "In the second guess: The first letter is not in the word. The second letter is not in the word. The third letter is in the word, but in the wrong spot. The fourth letter is correct. The fifth letter is in the word, but in the wrong spot.",
         "In the third guess: All letters are correct.",
       ],
       board: ["🟩⬛⬛⬛⬛", "⬛⬛🟨🟩🟨", "🟩🟩🟩🟩🟩"],
@@ -45,10 +45,10 @@ describe("parseGame", () => {
     ).toEqual({
       altText: [
         "The player lost the game.",
-        "In the first guess: The first letter is not in the word. The second letter is not in the word. The third letter is not in the word. The fourth letter is not in the word. The fifth letter is in the word, but in the incorrect spot.",
-        "In the second guess: The first letter is not in the word. The second letter is in the word, but in the incorrect spot. The third letter is not in the word. The fourth letter is not in the word. The fifth letter is not in the word.",
-        "In the third guess: The first letter is not in the word. The second letter is in the word, but in the incorrect spot. The third letter is not in the word. The fourth letter is correct. The fifth letter is not in the word.",
-        "In the fourth guess: The first letter is correct. The second letter is not in the word. The third letter is not in the word. The fourth letter is not in the word. The fifth letter is in the word, but in the incorrect spot.",
+        "In the first guess: The first letter is not in the word. The second letter is not in the word. The third letter is not in the word. The fourth letter is not in the word. The fifth letter is in the word, but in the wrong spot.",
+        "In the second guess: The first letter is not in the word. The second letter is in the word, but in the wrong spot. The third letter is not in the word. The fourth letter is not in the word. The fifth letter is not in the word.",
+        "In the third guess: The first letter is not in the word. The second letter is in the word, but in the wrong spot. The third letter is not in the word. The fourth letter is correct. The fifth letter is not in the word.",
+        "In the fourth guess: The first letter is correct. The second letter is not in the word. The third letter is not in the word. The fourth letter is not in the word. The fifth letter is in the word, but in the wrong spot.",
         "In the fifth guess: The first letter is correct. The second letter is not in the word. The third letter is not in the word. The fourth letter is correct. The fifth letter is not in the word.",
         "In the sixth guess: The first letter is correct. The second letter is not in the word. The third letter is not in the word. The fourth letter is correct. The fifth letter is not in the word.",
       ],
@@ -88,7 +88,7 @@ describe("parseGame", () => {
     ).toEqual({
       altText: [
         "The player won the game in 6 guesses.",
-        "In the first guess: The first letter is correct. The second letter is not in the word. The third letter is in the word, but in the incorrect spot. The fourth letter is not in the word. The fifth letter is in the word, but in the incorrect spot.",
+        "In the first guess: The first letter is correct. The second letter is not in the word. The third letter is in the word, but in the wrong spot. The fourth letter is not in the word. The fifth letter is in the word, but in the wrong spot.",
         "In the second guess: The first letter is correct. The second letter is correct. The third letter is not in the word. The fourth letter is not in the word. The fifth letter is not in the word.",
         "In the third guess: The first letter is correct. The second letter is correct. The third letter is not in the word. The fourth letter is not in the word. The fifth letter is not in the word.",
         "In the fourth guess: The first letter is correct. The second letter is not in the word. The third letter is correct. The fourth letter is not in the word. The fifth letter is not in the word.",
@@ -171,7 +171,7 @@ test("boardToAltText", () => {
     Array [
       "The player won the game in 3 guesses.",
       "In the first guess: The first letter is correct. The second letter is not in the word. The third letter is not in the word. The fourth letter is not in the word. The fifth letter is not in the word.",
-      "In the second guess: The first letter is not in the word. The second letter is not in the word. The third letter is in the word, but in the incorrect spot. The fourth letter is correct. The fifth letter is in the word, but in the incorrect spot.",
+      "In the second guess: The first letter is not in the word. The second letter is not in the word. The third letter is in the word, but in the wrong spot. The fourth letter is correct. The fifth letter is in the word, but in the wrong spot.",
       "In the third guess: All letters are correct.",
     ]
   `);
@@ -197,10 +197,10 @@ test("boardToAltText", () => {
     Array [
       "The player lost the game.",
       "In the first guess: The first letter is correct. The second letter is not in the word. The third letter is not in the word. The fourth letter is not in the word. The fifth letter is not in the word.",
-      "In the second guess: The first letter is not in the word. The second letter is not in the word. The third letter is in the word, but in the incorrect spot. The fourth letter is correct. The fifth letter is in the word, but in the incorrect spot.",
-      "In the third guess: The first letter is not in the word. The second letter is not in the word. The third letter is in the word, but in the incorrect spot. The fourth letter is correct. The fifth letter is in the word, but in the incorrect spot.",
-      "In the fourth guess: The first letter is not in the word. The second letter is not in the word. The third letter is in the word, but in the incorrect spot. The fourth letter is correct. The fifth letter is in the word, but in the incorrect spot.",
-      "In the fifth guess: The first letter is not in the word. The second letter is not in the word. The third letter is in the word, but in the incorrect spot. The fourth letter is correct. The fifth letter is in the word, but in the incorrect spot.",
+      "In the second guess: The first letter is not in the word. The second letter is not in the word. The third letter is in the word, but in the wrong spot. The fourth letter is correct. The fifth letter is in the word, but in the wrong spot.",
+      "In the third guess: The first letter is not in the word. The second letter is not in the word. The third letter is in the word, but in the wrong spot. The fourth letter is correct. The fifth letter is in the word, but in the wrong spot.",
+      "In the fourth guess: The first letter is not in the word. The second letter is not in the word. The third letter is in the word, but in the wrong spot. The fourth letter is correct. The fifth letter is in the word, but in the wrong spot.",
+      "In the fifth guess: The first letter is not in the word. The second letter is not in the word. The third letter is in the word, but in the wrong spot. The fourth letter is correct. The fifth letter is in the word, but in the wrong spot.",
       "In the sixth guess: The first letter is not in the word. The second letter is correct. The third letter is correct. The fourth letter is correct. The fifth letter is correct.",
     ]
   `);
