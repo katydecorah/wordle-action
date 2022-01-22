@@ -76,16 +76,18 @@ export function boardToAltText(boardWords: string[], won: boolean) {
     almost: "in the word, but in the wrong spot.",
   };
 
-  const describedRows = boardWords.map((row, index) => {
+  const rowToWords = (row: string, index: number) => {
     const wonWithLastGuess = won && index === boardWords.length - 1;
-    const describeRow = `${row
-      .split(" ")
-      .map((l, p) => `The ${position[p]} letter is ${status[l]}`)
-      .join(" ")}`;
+    const describeRow = `${row.split(" ").map(lettertoWords).join(" ")}`;
     return `In the ${position[index]} guess: ${
       wonWithLastGuess ? "All letters are correct." : describeRow
     }`;
-  });
+  };
+
+  const lettertoWords = (letter: string, index: number) =>
+    `The ${position[index]} letter is ${status[letter]}`;
+
+  const describedRows = boardWords.map(rowToWords);
   const luckyGuess = boardWords.length === 1 && won;
   const gameStatus = won ? "won" : "lost";
   const gameGuesses = won
