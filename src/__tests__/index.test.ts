@@ -4,7 +4,7 @@ import * as github from "@actions/github";
 import { setFailed, exportVariable } from "@actions/core";
 import returnWriteFile from "../write-file";
 
-let mockReadFile = `- number: 210
+const mockReadFile = `- number: 210
   score: 3
   board:
     - "🟩⬛⬛⬛⬛"
