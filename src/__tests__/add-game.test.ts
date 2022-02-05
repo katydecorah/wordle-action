@@ -1,8 +1,9 @@
 import addGame from "../add-game";
 
 jest.mock("@actions/core");
-jest.mock("../to-json", () => {
-  return jest.fn(() => [
+
+const mockReadFile = Promise.resolve(
+  JSON.stringify([
     {
       board: ["🟩⬛⬛⬛⬛", "⬛⬛🟨🟩🟨", "🟩🟩🟩🟩🟩"],
       boardWords: [
@@ -15,7 +16,11 @@ jest.mock("../to-json", () => {
       score: 3,
       won: true,
     },
-  ]);
+  ])
+);
+
+jest.mock("../read-file", () => {
+  return jest.fn().mockImplementation(() => mockReadFile);
 });
 
 const sample = {
@@ -33,6 +38,7 @@ const sample = {
 describe("addGame", () => {
   test("works", async () => {
     jest.useFakeTimers().setSystemTime(new Date("2022-01-18").getTime());
+
     expect(await addGame({ ...sample, fileName: "my-wordle.yml" })).toEqual([
       {
         board: ["🟩⬛⬛⬛⬛", "⬛⬛🟨🟩🟨", "🟩🟩🟩🟩🟩"],
