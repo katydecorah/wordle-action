@@ -26,6 +26,8 @@ Save Wordle scores to a YAML file. Pair it with the [iOS Shortcut](shortcut/READ
 To use this action, create a new workflow in `.github/workflows` and modify it as needed:
 
 ```yml
+name: Wordle
+
 on:
   issues:
     types: opened
