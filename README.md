@@ -26,6 +26,8 @@ Save Wordle scores to a YAML file. Pair it with the [iOS Shortcut](shortcut/READ
 To use this action, create a new workflow in `.github/workflows` and modify it as needed:
 
 ```yml
+name: Wordle
+
 on:
   issues:
     types: opened
@@ -40,7 +42,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Wordle
-        uses: katydecorah/wordle-to-yaml-action@v0.3.0
+        uses: katydecorah/wordle-to-yaml-action@v1.0.1
       - name: Commit files
         run: |
           git config --local user.email "action@github.com"

@@ -1,3 +1,5 @@
+name: Wordle
+
 on:
   issues:
     types: opened
