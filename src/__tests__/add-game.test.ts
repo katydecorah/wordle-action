@@ -89,7 +89,8 @@ describe("addGame", () => {
   test("can add wordle game to yaml file with whitespace", async () => {
     jest.useFakeTimers().setSystemTime(new Date("2022-01-18").getTime());
     mockReadFile = Promise.resolve(`
-`);
+
+  `);
     expect(await addGame({ ...sample, fileName: "my-wordle.yml" })).toEqual([
       {
         board: ["🟩⬛⬛⬛⬛", "⬛⬛🟨🟩🟨", "🟩🟩🟩🟩🟩"],
