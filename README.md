@@ -42,7 +42,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Wordle
-        uses: katydecorah/wordle-to-yaml-action@v1.0.1
+        uses: katydecorah/wordle-to-yaml-action@v1.0.2
       - name: Commit files
         run: |
           git config --local user.email "action@github.com"
