@@ -12636,7 +12636,9 @@ function toJson(fileName) {
     return to_json_awaiter(this, void 0, void 0, function* () {
         try {
             const contents = (yield returnReadFile(fileName));
-            return contents ? load(contents) : [];
+            return contents && typeof load(contents.trim()) === "object"
+                ? load(contents)
+                : [];
         }
         catch (error) {
             throw new Error(error);
