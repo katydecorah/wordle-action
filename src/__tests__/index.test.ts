@@ -4,14 +4,15 @@ import * as github from "@actions/github";
 import { setFailed, exportVariable } from "@actions/core";
 import returnWriteFile from "../write-file";
 
-const mockReadFile = `- number: 210
-  score: 3
-  board:
-    - "🟩⬛⬛⬛⬛"
-    - "⬛⬛🟨🟩🟨"
-    - "🟩🟩🟩🟩🟩"
-  won: true
-  date: "2022-01-15"
+const mockReadFile = `games:
+  - number: 210
+    score: 3
+    board:
+      - "🟩⬛⬛⬛⬛"
+      - "⬛⬛🟨🟩🟨"
+      - "🟩🟩🟩🟩🟩"
+    won: true
+    date: "2022-01-15"
 `;
 jest.mock("@actions/core", () => {
   return {
@@ -53,38 +54,59 @@ describe("index", () => {
       "Wordle 213 5/6"
     );
     expect(setFailed).not.toHaveBeenCalledWith();
-    expect(returnWriteFile.mock.calls[0]).toEqual([
-      "oh-my-wordle.yml",
-      [
-        {
-          board: ["🟩⬛⬛⬛⬛", "⬛⬛🟨🟩🟨", "🟩🟩🟩🟩🟩"],
-          date: "2022-01-15",
-          number: 210,
-          score: 3,
-          won: true,
-        },
-        {
-          board: [
-            "🟩⬛🟨⬛⬛",
-            "🟩🟩⬛⬛⬛",
-            "🟩🟩⬛🟨⬛",
-            "🟩🟩🟩🟨⬛",
-            "🟩🟩🟩🟩🟩",
+    expect(returnWriteFile.mock.calls[0]).toMatchInlineSnapshot(`
+      Array [
+        "oh-my-wordle.yml",
+        Object {
+          "distribution": Object {
+            "1": 0,
+            "2": 0,
+            "3": 1,
+            "4": 0,
+            "5": 1,
+            "X": 0,
+          },
+          "games": Array [
+            Object {
+              "board": Array [
+                "🟩⬛🟨⬛⬛",
+                "🟩🟩⬛⬛⬛",
+                "🟩🟩⬛🟨⬛",
+                "🟩🟩🟩🟨⬛",
+                "🟩🟩🟩🟩🟩",
+              ],
+              "boardWords": Array [
+                "yes no almost no no",
+                "yes yes no no no",
+                "yes yes no almost no",
+                "yes yes yes almost no",
+                "yes yes yes yes yes",
+              ],
+              "date": "2022-01-18",
+              "number": 213,
+              "score": 5,
+              "won": true,
+            },
+            Object {
+              "board": Array [
+                "🟩⬛⬛⬛⬛",
+                "⬛⬛🟨🟩🟨",
+                "🟩🟩🟩🟩🟩",
+              ],
+              "date": "2022-01-15",
+              "number": 210,
+              "score": 3,
+              "won": true,
+            },
           ],
-          boardWords: [
-            "yes no almost no no",
-            "yes yes no no no",
-            "yes yes no almost no",
-            "yes yes yes almost no",
-            "yes yes yes yes yes",
-          ],
-          date: "2022-01-18",
-          number: 213,
-          score: 5,
-          won: true,
+          "streakCurrent": 2,
+          "streakMax": 2,
+          "totalPlayed": 2,
+          "totalWon": 2,
+          "totalWonPercent": 1,
         },
-      ],
-    ]);
+      ]
+    `);
   });
 
   test("error, no payload", async () => {

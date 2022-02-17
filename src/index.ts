@@ -5,6 +5,7 @@ import * as github from "@actions/github";
 import parseGame from "./parse-game";
 import returnWriteFile from "./write-file";
 import addGame from "./add-game";
+import buildStatistics, { Statistics } from "./statistics";
 
 export async function wordle() {
   try {
@@ -27,7 +28,11 @@ export async function wordle() {
       ...formattedGame,
       fileName,
     })) as Game[];
-    await returnWriteFile(fileName, games);
+    const yaml = {
+      ...buildStatistics(games),
+      games,
+    };
+    await returnWriteFile(fileName, yaml);
   } catch (error) {
     setFailed(error.message);
   }
@@ -49,3 +54,7 @@ export type Game = {
 };
 
 export type SquareEmoji = "⬜" | "⬛" | "🟨" | "🟩";
+
+export interface Yaml extends Statistics {
+  games: Game[];
+}

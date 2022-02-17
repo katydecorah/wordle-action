@@ -3,20 +3,22 @@ import addGame from "../add-game";
 jest.mock("@actions/core");
 
 let mockReadFile = Promise.resolve(
-  JSON.stringify([
-    {
-      board: ["🟩⬛⬛⬛⬛", "⬛⬛🟨🟩🟨", "🟩🟩🟩🟩🟩"],
-      boardWords: [
-        "yes no no no no",
-        "no no almost yes almost",
-        "yes yes yes yes yes",
-      ],
-      date: "2022-01-17",
-      number: 209,
-      score: 3,
-      won: true,
-    },
-  ])
+  JSON.stringify({
+    games: [
+      {
+        board: ["🟩⬛⬛⬛⬛", "⬛⬛🟨🟩🟨", "🟩🟩🟩🟩🟩"],
+        boardWords: [
+          "yes no no no no",
+          "no no almost yes almost",
+          "yes yes yes yes yes",
+        ],
+        date: "2022-01-17",
+        number: 209,
+        score: 3,
+        won: true,
+      },
+    ],
+  })
 );
 
 jest.mock("../read-file", () => {
@@ -39,37 +41,49 @@ describe("addGame", () => {
   test("works", async () => {
     jest.useFakeTimers().setSystemTime(new Date("2022-01-18").getTime());
 
-    expect(await addGame({ ...sample, fileName: "my-wordle.yml" })).toEqual([
-      {
-        board: ["🟩⬛⬛⬛⬛", "⬛⬛🟨🟩🟨", "🟩🟩🟩🟩🟩"],
-        boardWords: [
-          "yes no no no no",
-          "no no almost yes almost",
-          "yes yes yes yes yes",
-        ],
-        date: "2022-01-17",
-        number: 209,
-        score: 3,
-        won: true,
-      },
-      {
-        board: ["🟩⬛⬛⬛⬛", "⬛⬛🟨🟩🟨", "🟩🟩🟩🟩🟩"],
-        boardWords: [
-          "yes no no no no",
-          "no no almost yes almost",
-          "yes yes yes yes yes",
-        ],
-        date: "2022-01-18",
-        number: 210,
-        score: 3,
-        won: true,
-      },
-    ]);
+    expect(await addGame({ ...sample, fileName: "my-wordle.yml" }))
+      .toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "board": Array [
+            "🟩⬛⬛⬛⬛",
+            "⬛⬛🟨🟩🟨",
+            "🟩🟩🟩🟩🟩",
+          ],
+          "boardWords": Array [
+            "yes no no no no",
+            "no no almost yes almost",
+            "yes yes yes yes yes",
+          ],
+          "date": "2022-01-17",
+          "number": 209,
+          "score": 3,
+          "won": true,
+        },
+        Object {
+          "board": Array [
+            "🟩⬛⬛⬛⬛",
+            "⬛⬛🟨🟩🟨",
+            "🟩🟩🟩🟩🟩",
+          ],
+          "boardWords": Array [
+            "yes no no no no",
+            "no no almost yes almost",
+            "yes yes yes yes yes",
+          ],
+          "date": "2022-01-18",
+          "number": 210,
+          "score": 3,
+          "won": true,
+        },
+      ]
+    `);
   });
 
   test("can add wordle game to filled yaml file", async () => {
     jest.useFakeTimers().setSystemTime(new Date("2022-01-18").getTime());
-    mockReadFile = Promise.resolve(`  - number: 210
+    mockReadFile = Promise.resolve(`games:
+  - number: 210
     score: 3
     board:
       - "🟩⬛⬛⬛⬛"

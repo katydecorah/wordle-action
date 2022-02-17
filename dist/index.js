@@ -8757,10 +8757,10 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
 };
 
 
-function returnWriteFile(fileName, games) {
+function returnWriteFile(fileName, yaml) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const data = (0,json_to_pretty_yaml/* stringify */.P)(games);
+            const data = (0,json_to_pretty_yaml/* stringify */.P)(yaml);
             const promise = (0,promises_namespaceObject.writeFile)(fileName, data);
             yield promise;
         }
@@ -12662,12 +12662,24 @@ function toJson(fileName) {
     return to_json_awaiter(this, void 0, void 0, function* () {
         try {
             const contents = (yield returnReadFile(fileName));
-            return contents && Array.isArray(load(contents)) ? load(contents) : [];
+            return parseYaml(contents);
         }
         catch (error) {
             throw new Error(error);
         }
     });
+}
+const template = { games: [] };
+function parseYaml(contents) {
+    if (!contents)
+        return template;
+    const json = load(contents);
+    if (!json)
+        return template;
+    if ("games" in json)
+        return json;
+    else
+        return { games: json };
 }
 
 ;// CONCATENATED MODULE: ./src/add-game.ts
@@ -12683,17 +12695,64 @@ var add_game_awaiter = (undefined && undefined.__awaiter) || function (thisArg, 
 
 function addGame({ gameNumber, score, board, boardWords, fileName, won, }) {
     return add_game_awaiter(this, void 0, void 0, function* () {
-        const wordleJson = (yield toJson(fileName));
-        wordleJson.push({
-            number: gameNumber,
-            score,
-            board,
-            boardWords,
-            won,
-            date: new Date().toISOString().slice(0, 10),
-        });
-        return wordleJson.sort((a, b) => a.number - b.number);
+        const yaml = (yield toJson(fileName));
+        return [
+            ...yaml.games,
+            {
+                number: gameNumber,
+                score,
+                board,
+                boardWords,
+                won,
+                date: new Date().toISOString().slice(0, 10),
+            },
+        ].sort((a, b) => a.number - b.number);
     });
+}
+
+;// CONCATENATED MODULE: ./src/statistics.ts
+function buildStatistics(games) {
+    const sorted = games.sort((a, b) => new Date(b.date).valueOf() - new Date(a.date).valueOf());
+    const totalPlayed = games.length;
+    const totalWon = games.filter(({ won }) => won).length;
+    return {
+        totalPlayed,
+        totalWon,
+        totalWonPercent: totalWon / totalPlayed,
+        streakCurrent: calcCurrentStreak(sorted),
+        streakMax: calcMaxStreak(sorted),
+        distribution: createDistribution(sorted),
+    };
+}
+function createDistribution(games) {
+    return games.reduce((obj, game) => {
+        obj[game.score]++;
+        return obj;
+    }, { X: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 });
+}
+function calcCurrentStreak(games) {
+    let currentStreak = 0;
+    for (const game of games) {
+        if (game.won)
+            currentStreak++;
+        else
+            break;
+    }
+    return currentStreak;
+}
+function calcMaxStreak(games) {
+    let maxStreakArr = [];
+    let maxStreakCounter = 0;
+    for (const [i, game] of games.entries()) {
+        if (game.won) {
+            maxStreakCounter++;
+        }
+        if (game.won === false || games.length - 1 === i) {
+            maxStreakArr = [...maxStreakArr, maxStreakCounter];
+            maxStreakCounter = 0;
+        }
+    }
+    return maxStreakArr.sort().reverse()[0];
 }
 
 ;// CONCATENATED MODULE: ./src/index.ts
@@ -12707,6 +12766,7 @@ var src_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argu
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+
 
 
 
@@ -12728,7 +12788,8 @@ function wordle() {
             (0,core.exportVariable)("WordleSummary", `Wordle ${formattedGame.gameNumber} ${formattedGame.score}/6`);
             const fileName = (0,core.getInput)("wordleFileName");
             const games = (yield addGame(Object.assign(Object.assign({}, formattedGame), { fileName })));
-            yield returnWriteFile(fileName, games);
+            const yaml = Object.assign(Object.assign({}, buildStatistics(games)), { games });
+            yield returnWriteFile(fileName, yaml);
         }
         catch (error) {
             (0,core.setFailed)(error.message);

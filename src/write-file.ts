@@ -1,10 +1,10 @@
-import { Game } from ".";
+import { Yaml } from ".";
 import { writeFile } from "fs/promises";
 import { stringify } from "json-to-pretty-yaml";
 
-export default async function returnWriteFile(fileName: string, games: Game[]) {
+export default async function returnWriteFile(fileName: string, yaml: Yaml) {
   try {
-    const data = stringify(games);
+    const data = stringify(yaml);
     const promise = writeFile(fileName, data);
     await promise;
   } catch (error) {
