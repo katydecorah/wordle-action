@@ -1,4 +1,4 @@
-import { Score, Board, Yaml } from "./index";
+import { Score, Board, Game } from "./index";
 import toJson from "./to-json";
 
 export default async function addGame({
@@ -16,7 +16,7 @@ export default async function addGame({
   fileName: string;
   won: boolean;
 }) {
-  const yaml = (await toJson(fileName)) as Yaml;
+  const yaml = (await toJson(fileName)) as { games: Game[] };
   return [
     ...yaml.games,
     {
