@@ -22,7 +22,7 @@ function createDistribution(games: Game[]) {
       obj[game.score]++;
       return obj;
     },
-    { X: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 }
+    { X: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 }
   );
 }
 
