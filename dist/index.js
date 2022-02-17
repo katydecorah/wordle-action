@@ -12728,7 +12728,7 @@ function createDistribution(games) {
     return games.reduce((obj, game) => {
         obj[game.score]++;
         return obj;
-    }, { X: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 });
+    }, { X: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 });
 }
 function calcCurrentStreak(games) {
     let currentStreak = 0;
