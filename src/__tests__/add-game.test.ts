@@ -3,20 +3,22 @@ import addGame from "../add-game";
 jest.mock("@actions/core");
 
 let mockReadFile = Promise.resolve(
-  JSON.stringify([
-    {
-      board: ["🟩⬛⬛⬛⬛", "⬛⬛🟨🟩🟨", "🟩🟩🟩🟩🟩"],
-      boardWords: [
-        "yes no no no no",
-        "no no almost yes almost",
-        "yes yes yes yes yes",
-      ],
-      date: "2022-01-17",
-      number: 209,
-      score: 3,
-      won: true,
-    },
-  ])
+  JSON.stringify({
+    games: [
+      {
+        board: ["🟩⬛⬛⬛⬛", "⬛⬛🟨🟩🟨", "🟩🟩🟩🟩🟩"],
+        boardWords: [
+          "yes no no no no",
+          "no no almost yes almost",
+          "yes yes yes yes yes",
+        ],
+        date: "2022-01-17",
+        number: 209,
+        score: 3,
+        won: true,
+      },
+    ],
+  })
 );
 
 jest.mock("../read-file", () => {
