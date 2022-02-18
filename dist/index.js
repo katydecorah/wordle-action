@@ -12711,7 +12711,7 @@ function buildStatistics(games) {
     return {
         totalPlayed,
         totalWon,
-        totalWonPercent: (totalWon / totalPlayed).toFixed(0),
+        totalWonPercent: ((totalWon / totalPlayed) * 100).toFixed(0),
         streakCurrent: calcCurrentStreak(sorted),
         streakMax: calcMaxStreak(sorted),
         distribution: createDistribution(sorted),
@@ -12726,24 +12726,30 @@ function createDistribution(games) {
 }
 function calcCurrentStreak(games) {
     let currentStreak = 0;
-    for (const game of games) {
-        if (game.won)
+    const lastGame = games[0].number;
+    for (const [index, game] of games.entries()) {
+        if (game.won && dailyStreak(lastGame, index, game))
             currentStreak++;
         else
             break;
     }
     return currentStreak;
 }
+function dailyStreak(lastGame, index, game) {
+    return lastGame - index === game.number;
+}
 function calcMaxStreak(games) {
     let maxStreakArr = [];
     let maxStreakCounter = 0;
-    for (const [i, game] of games.entries()) {
-        if (game.won) {
+    let lastGame = games[0].number;
+    for (const [index, game] of games.entries()) {
+        if (game.won && dailyStreak(lastGame, index, game)) {
             maxStreakCounter++;
         }
-        if (game.won === false || games.length - 1 === i) {
+        if (game.won === false || games.length - 1 === index) {
             maxStreakArr = [...maxStreakArr, maxStreakCounter];
             maxStreakCounter = 0;
+            lastGame = game.number;
         }
     }
     return maxStreakArr.sort().reverse()[0];

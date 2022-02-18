@@ -100,11 +100,11 @@ describe("index", () => {
               "won": true,
             },
           ],
-          "streakCurrent": 2,
-          "streakMax": 2,
+          "streakCurrent": 1,
+          "streakMax": 1,
           "totalPlayed": 2,
           "totalWon": 2,
-          "totalWonPercent": "1",
+          "totalWonPercent": "100",
         },
       ]
     `);

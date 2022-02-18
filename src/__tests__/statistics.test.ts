@@ -1,9 +1,8 @@
 import buildStatistics from "../statistics";
 
 test("buildStatistics", () => {
-  expect(
-    buildStatistics([{ won: true, score: 3, number: 1, date: "2022-01-01" }])
-  ).toMatchInlineSnapshot(`
+  expect(buildStatistics([{ won: true, score: 3, number: 1 }]))
+    .toMatchInlineSnapshot(`
     Object {
       "distribution": Object {
         "1": 0,
@@ -18,12 +17,11 @@ test("buildStatistics", () => {
       "streakMax": 1,
       "totalPlayed": 1,
       "totalWon": 1,
-      "totalWonPercent": "1",
+      "totalWonPercent": "100",
     }
   `);
-  expect(
-    buildStatistics([{ won: false, score: "X", number: 1, date: "2022-01-01" }])
-  ).toMatchInlineSnapshot(`
+  expect(buildStatistics([{ won: false, score: "X", number: 1 }]))
+    .toMatchInlineSnapshot(`
     Object {
       "distribution": Object {
         "1": 0,
@@ -43,9 +41,9 @@ test("buildStatistics", () => {
   `);
   expect(
     buildStatistics([
-      { won: true, score: "3", number: 1, date: "2022-01-01" },
-      { won: true, score: "3", number: 2, date: "2022-01-02" },
-      { won: true, score: "5", number: 3, date: "2022-01-03" },
+      { won: true, score: "3", number: 1 },
+      { won: true, score: "3", number: 2 },
+      { won: true, score: "5", number: 3 },
     ])
   ).toMatchInlineSnapshot(`
     Object {
@@ -62,14 +60,14 @@ test("buildStatistics", () => {
       "streakMax": 3,
       "totalPlayed": 3,
       "totalWon": 3,
-      "totalWonPercent": "1",
+      "totalWonPercent": "100",
     }
   `);
   expect(
     buildStatistics([
-      { won: true, score: "3", number: 1, date: "2022-01-01" },
-      { won: false, score: "X", number: 2, date: "2022-01-02" },
-      { won: true, score: "3", number: 3, date: "2022-01-03" },
+      { won: true, score: "3", number: 1 },
+      { won: false, score: "X", number: 2 },
+      { won: true, score: "3", number: 3 },
     ])
   ).toMatchInlineSnapshot(`
     Object {
@@ -86,14 +84,14 @@ test("buildStatistics", () => {
       "streakMax": 1,
       "totalPlayed": 3,
       "totalWon": 2,
-      "totalWonPercent": "1",
+      "totalWonPercent": "67",
     }
   `);
   expect(
     buildStatistics([
-      { won: false, score: "X", number: 1, date: "2022-01-01" },
-      { won: false, score: "X", number: 2, date: "2022-01-02" },
-      { won: false, score: "X", number: 3, date: "2022-01-03" },
+      { won: false, score: "X", number: 1 },
+      { won: false, score: "X", number: 2 },
+      { won: false, score: "X", number: 3 },
     ])
   ).toMatchInlineSnapshot(`
     Object {
@@ -115,12 +113,12 @@ test("buildStatistics", () => {
   `);
   expect(
     buildStatistics([
-      { won: true, score: "1", number: 1, date: "2022-01-01" },
-      { won: true, score: "4", number: 2, date: "2022-01-02" },
-      { won: true, score: "4", number: 3, date: "2022-01-03" },
-      { won: false, score: "X", number: 4, date: "2022-01-04" },
-      { won: true, score: "2", number: 5, date: "2022-01-05" },
-      { won: true, score: "5", number: 6, date: "2022-01-06" },
+      { won: true, score: "1", number: 1 },
+      { won: true, score: "4", number: 2 },
+      { won: true, score: "4", number: 3 },
+      { won: false, score: "X", number: 4 },
+      { won: true, score: "2", number: 5 },
+      { won: true, score: "5", number: 6 },
     ])
   ).toMatchInlineSnapshot(`
     Object {
@@ -134,10 +132,10 @@ test("buildStatistics", () => {
         "X": 1,
       },
       "streakCurrent": 2,
-      "streakMax": 3,
+      "streakMax": 2,
       "totalPlayed": 6,
       "totalWon": 5,
-      "totalWonPercent": "1",
+      "totalWonPercent": "83",
     }
   `);
 });
