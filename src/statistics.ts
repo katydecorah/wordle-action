@@ -1,9 +1,9 @@
 import { Game } from ".";
 
 export default function buildStatistics(games: Game[]): Statistics {
-  const sorted = games.sort((a, b) => b.number - a.number);
-  const totalPlayed = games.length;
-  const totalWon = games.filter(({ won }) => won).length;
+  const sorted = [...games].sort((a, b) => b.number - a.number);
+  const totalPlayed = sorted.length;
+  const totalWon = sorted.filter(({ won }) => won).length;
   return {
     totalPlayed,
     totalWon,
