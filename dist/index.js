@@ -8762,8 +8762,7 @@ function returnWriteFile(fileName, games) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const data = (0,json_to_pretty_yaml/* stringify */.P)(games);
-            const promise = (0,promises_namespaceObject.writeFile)(fileName, data);
-            yield promise;
+            yield (0,promises_namespaceObject.writeFile)(fileName, data);
         }
         catch (error) {
             throw new Error(error);
@@ -12682,7 +12681,7 @@ var add_game_awaiter = (undefined && undefined.__awaiter) || function (thisArg, 
     });
 };
 
-function addGame({ game, fileName }) {
+function addGame({ game, fileName, }) {
     return add_game_awaiter(this, void 0, void 0, function* () {
         const wordleJson = (yield toJson(fileName));
         wordleJson.push(game);
@@ -12717,14 +12716,14 @@ function wordle() {
             if (!title || !body) {
                 throw new Error("Unable to parse GitHub issue.");
             }
-            (0,core.exportVariable)("IssueNumber", number);
             const game = parseGame(title, body);
-            (0,core.exportVariable)("WordleSummary", `Wordle ${game.number} ${game.score}/6`);
             const fileName = (0,core.getInput)("wordleFileName");
             const games = (yield addGame({
                 game,
                 fileName,
             }));
+            (0,core.exportVariable)("IssueNumber", number);
+            (0,core.exportVariable)("WordleSummary", `Wordle ${game.number} ${game.score}/6`);
             yield returnWriteFile(fileName, games);
         }
         catch (error) {
