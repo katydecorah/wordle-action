@@ -12763,7 +12763,7 @@ function lostOrBrokeStreak({ index, games, game }) {
     return statusBrokeStreak({ index, games, game }) || statusLost(game);
 }
 function statusBrokeStreak({ index, games, game }) {
-    return (index !== 0 && games[index - 1].number !== (game.number + 1));
+    return index !== 0 && games[index - 1].number !== game.number + 1;
 }
 function statusWon(game) {
     return game.won;
