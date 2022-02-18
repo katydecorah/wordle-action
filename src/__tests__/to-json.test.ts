@@ -10,9 +10,7 @@ jest.mock("../read-file", () => {
 
 describe("toJson", () => {
   test("works", async () => {
-    expect(await toJson("my-file.yml")).toEqual({
-      games: [{ gameNumber: 100 }],
-    });
+    expect(await toJson("my-file.yml")).toEqual([{ gameNumber: 100 }]);
   });
   test("error", async () => {
     mockRead = Promise.reject("Error");

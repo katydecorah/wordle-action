@@ -16,9 +16,9 @@ export default async function addGame({
   fileName: string;
   won: boolean;
 }) {
-  const yaml = (await toJson(fileName)) as { games: Game[] };
+  const games = (await toJson(fileName)) as Game[];
   return [
-    ...yaml.games,
+    ...games,
     {
       number: gameNumber,
       score,

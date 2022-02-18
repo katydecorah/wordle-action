@@ -2,9 +2,7 @@ import returnReadFile from "./read-file";
 import { load } from "js-yaml";
 import { Game } from ".";
 
-export default async function toJson(
-  fileName: string
-): Promise<{ games: Game[] }> {
+export default async function toJson(fileName: string): Promise<Game[]> {
   try {
     const contents = (await returnReadFile(fileName)) as string;
     return parseYaml(contents);
@@ -13,12 +11,14 @@ export default async function toJson(
   }
 }
 
-const template = { games: [] };
-
-function parseYaml(contents: string): { games: Game[] } {
-  if (!contents) return template;
+function parseYaml(contents: string): Game[] {
+  // empty file
+  if (!contents) return [];
   const json = load(contents) as { games: [] } | Game[];
-  if (!json) return template;
-  if ("games" in json) return json;
-  else return { games: json };
+  // unable to parse file
+  if (!json) return [];
+  // new format
+  if ("games" in json) return json.games;
+  // legacy format
+  else return json;
 }

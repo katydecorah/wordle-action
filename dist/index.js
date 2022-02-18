@@ -12669,17 +12669,20 @@ function toJson(fileName) {
         }
     });
 }
-const template = { games: [] };
 function parseYaml(contents) {
+    // empty file
     if (!contents)
-        return template;
+        return [];
     const json = load(contents);
+    // unable to parse file
     if (!json)
-        return template;
+        return [];
+    // new format
     if ("games" in json)
-        return json;
+        return json.games;
+    // legacy format
     else
-        return { games: json };
+        return json;
 }
 
 ;// CONCATENATED MODULE: ./src/add-game.ts
@@ -12695,9 +12698,9 @@ var add_game_awaiter = (undefined && undefined.__awaiter) || function (thisArg, 
 
 function addGame({ gameNumber, score, board, boardWords, fileName, won, }) {
     return add_game_awaiter(this, void 0, void 0, function* () {
-        const yaml = (yield toJson(fileName));
+        const games = (yield toJson(fileName));
         return [
-            ...yaml.games,
+            ...games,
             {
                 number: gameNumber,
                 score,
