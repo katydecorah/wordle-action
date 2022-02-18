@@ -8703,16 +8703,17 @@ function parseGame(title, body) {
         if (!split || split.length !== 3) {
             throw new Error("The GitHub Issue title is not in the correct format. Must be: `Wordle ### #/#`");
         }
-        const gameNumber = parseInt(split[1]);
+        const number = parseInt(split[1]);
         const score = split[2][0] === "X" ? "X" : parseInt(split[2][0]);
         const board = checkBoard(body);
         const boardWords = board.map(emojiToWord);
         return {
-            gameNumber,
+            number,
             score,
             won: score !== "X",
             board,
             boardWords,
+            date: new Date().toISOString().slice(0, 10),
         };
     }
     catch (error) {
@@ -12681,17 +12682,10 @@ var add_game_awaiter = (undefined && undefined.__awaiter) || function (thisArg, 
     });
 };
 
-function addGame({ gameNumber, score, board, boardWords, fileName, won, }) {
+function addGame({ game, fileName }) {
     return add_game_awaiter(this, void 0, void 0, function* () {
         const wordleJson = (yield toJson(fileName));
-        wordleJson.push({
-            number: gameNumber,
-            score,
-            board,
-            boardWords,
-            won,
-            date: new Date().toISOString().slice(0, 10),
-        });
+        wordleJson.push(game);
         return wordleJson.sort((a, b) => a.number - b.number);
     });
 }
@@ -12724,10 +12718,13 @@ function wordle() {
                 throw new Error("Unable to parse GitHub issue.");
             }
             (0,core.exportVariable)("IssueNumber", number);
-            const formattedGame = parseGame(title, body);
-            (0,core.exportVariable)("WordleSummary", `Wordle ${formattedGame.gameNumber} ${formattedGame.score}/6`);
+            const game = parseGame(title, body);
+            (0,core.exportVariable)("WordleSummary", `Wordle ${game.number} ${game.score}/6`);
             const fileName = (0,core.getInput)("wordleFileName");
-            const games = (yield addGame(Object.assign(Object.assign({}, formattedGame), { fileName })));
+            const games = (yield addGame({
+                game,
+                fileName,
+            }));
             yield returnWriteFile(fileName, games);
         }
         catch (error) {

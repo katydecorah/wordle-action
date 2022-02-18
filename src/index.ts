@@ -17,14 +17,11 @@ export async function wordle() {
       throw new Error("Unable to parse GitHub issue.");
     }
     exportVariable("IssueNumber", number);
-    const formattedGame = parseGame(title, body);
-    exportVariable(
-      "WordleSummary",
-      `Wordle ${formattedGame.gameNumber} ${formattedGame.score}/6`
-    );
+    const game = parseGame(title, body);
+    exportVariable("WordleSummary", `Wordle ${game.number} ${game.score}/6`);
     const fileName: string = getInput("wordleFileName");
     const games = (await addGame({
-      ...formattedGame,
+      game,
       fileName,
     })) as Game[];
     await returnWriteFile(fileName, games);
