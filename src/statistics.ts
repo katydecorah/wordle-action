@@ -1,15 +1,13 @@
 import { Game } from ".";
 
 export default function buildStatistics(games: Game[]): Statistics {
-  const sorted = games.sort(
-    (a, b) => new Date(b.date).valueOf() - new Date(a.date).valueOf()
-  );
+  const sorted = games.sort((a, b) => b.number - a.number);
   const totalPlayed = games.length;
   const totalWon = games.filter(({ won }) => won).length;
   return {
     totalPlayed,
     totalWon,
-    totalWonPercent: totalWon / totalPlayed,
+    totalWonPercent: (totalWon / totalPlayed).toFixed(0),
     streakCurrent: calcCurrentStreak(sorted),
     streakMax: calcMaxStreak(sorted),
     distribution: createDistribution(sorted),
@@ -54,7 +52,7 @@ function calcMaxStreak(games: Game[]) {
 export type Statistics = {
   totalPlayed: number;
   totalWon: number;
-  totalWonPercent: number;
+  totalWonPercent: string;
   streakCurrent: number;
   streakMax: number;
   distribution: {

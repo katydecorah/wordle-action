@@ -104,7 +104,7 @@ describe("index", () => {
           "streakMax": 2,
           "totalPlayed": 2,
           "totalWon": 2,
-          "totalWonPercent": 1,
+          "totalWonPercent": "1",
         },
       ]
     `);

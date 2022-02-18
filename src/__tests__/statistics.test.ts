@@ -1,8 +1,9 @@
 import buildStatistics from "../statistics";
 
 test("buildStatistics", () => {
-  expect(buildStatistics([{ won: true, score: 3, date: "2022-01-01" }]))
-    .toMatchInlineSnapshot(`
+  expect(
+    buildStatistics([{ won: true, score: 3, number: 1, date: "2022-01-01" }])
+  ).toMatchInlineSnapshot(`
     Object {
       "distribution": Object {
         "1": 0,
@@ -17,11 +18,12 @@ test("buildStatistics", () => {
       "streakMax": 1,
       "totalPlayed": 1,
       "totalWon": 1,
-      "totalWonPercent": 1,
+      "totalWonPercent": "1",
     }
   `);
-  expect(buildStatistics([{ won: false, score: "X", date: "2022-01-01" }]))
-    .toMatchInlineSnapshot(`
+  expect(
+    buildStatistics([{ won: false, score: "X", number: 1, date: "2022-01-01" }])
+  ).toMatchInlineSnapshot(`
     Object {
       "distribution": Object {
         "1": 0,
@@ -36,14 +38,14 @@ test("buildStatistics", () => {
       "streakMax": 0,
       "totalPlayed": 1,
       "totalWon": 0,
-      "totalWonPercent": 0,
+      "totalWonPercent": "0",
     }
   `);
   expect(
     buildStatistics([
-      { won: true, score: "3", date: "2022-01-01" },
-      { won: true, score: "3", date: "2022-01-02" },
-      { won: true, score: "5", date: "2022-01-03" },
+      { won: true, score: "3", number: 1, date: "2022-01-01" },
+      { won: true, score: "3", number: 2, date: "2022-01-02" },
+      { won: true, score: "5", number: 3, date: "2022-01-03" },
     ])
   ).toMatchInlineSnapshot(`
     Object {
@@ -60,14 +62,14 @@ test("buildStatistics", () => {
       "streakMax": 3,
       "totalPlayed": 3,
       "totalWon": 3,
-      "totalWonPercent": 1,
+      "totalWonPercent": "1",
     }
   `);
   expect(
     buildStatistics([
-      { won: true, score: "3", date: "2022-01-01" },
-      { won: false, score: "X", date: "2022-01-02" },
-      { won: true, score: "3", date: "2022-01-03" },
+      { won: true, score: "3", number: 1, date: "2022-01-01" },
+      { won: false, score: "X", number: 2, date: "2022-01-02" },
+      { won: true, score: "3", number: 3, date: "2022-01-03" },
     ])
   ).toMatchInlineSnapshot(`
     Object {
@@ -84,14 +86,14 @@ test("buildStatistics", () => {
       "streakMax": 1,
       "totalPlayed": 3,
       "totalWon": 2,
-      "totalWonPercent": 0.6666666666666666,
+      "totalWonPercent": "1",
     }
   `);
   expect(
     buildStatistics([
-      { won: false, score: "X", date: "2022-01-01" },
-      { won: false, score: "X", date: "2022-01-02" },
-      { won: false, score: "X", date: "2022-01-03" },
+      { won: false, score: "X", number: 1, date: "2022-01-01" },
+      { won: false, score: "X", number: 2, date: "2022-01-02" },
+      { won: false, score: "X", number: 3, date: "2022-01-03" },
     ])
   ).toMatchInlineSnapshot(`
     Object {
@@ -108,17 +110,17 @@ test("buildStatistics", () => {
       "streakMax": 0,
       "totalPlayed": 3,
       "totalWon": 0,
-      "totalWonPercent": 0,
+      "totalWonPercent": "0",
     }
   `);
   expect(
     buildStatistics([
-      { won: true, score: "1", date: "2022-01-01" },
-      { won: true, score: "4", date: "2022-01-02" },
-      { won: true, score: "4", date: "2022-01-03" },
-      { won: false, score: "X", date: "2022-01-04" },
-      { won: true, score: "2", date: "2022-01-05" },
-      { won: true, score: "5", date: "2022-01-06" },
+      { won: true, score: "1", number: 1, date: "2022-01-01" },
+      { won: true, score: "4", number: 2, date: "2022-01-02" },
+      { won: true, score: "4", number: 3, date: "2022-01-03" },
+      { won: false, score: "X", number: 4, date: "2022-01-04" },
+      { won: true, score: "2", number: 5, date: "2022-01-05" },
+      { won: true, score: "5", number: 6, date: "2022-01-06" },
     ])
   ).toMatchInlineSnapshot(`
     Object {
@@ -135,7 +137,7 @@ test("buildStatistics", () => {
       "streakMax": 3,
       "totalPlayed": 6,
       "totalWon": 5,
-      "totalWonPercent": 0.8333333333333334,
+      "totalWonPercent": "1",
     }
   `);
 });
