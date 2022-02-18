@@ -1,77 +1,29 @@
-totalPlayed: 6
-totalWon: 6
+totalPlayed: 7
+totalWon: 7
 totalWonPercent: "100"
-streakCurrent: 1
-streakMax: 1
+streakCurrent: 3
+streakMax: 3
 distribution:
   1: 0
   2: 0
   3: 1
   4: 2
   5: 3
-  6: 0
+  6: 1
   X: 0
 games:
-  - number: 244
-    score: 5
-    won: true
+  - number: 210
+    score: 3
     board:
-      - "⬛⬛⬛⬛🟩"
-      - "⬛⬛🟨⬛🟩"
-      - "⬛🟨⬛🟨⬛"
-      - "🟨⬛⬛🟨🟩"
+      - "🟩⬛⬛⬛⬛"
+      - "⬛⬛🟨🟩🟨"
       - "🟩🟩🟩🟩🟩"
-    boardWords:
-      - "no no no no yes"
-      - "no no almost no yes"
-      - "no almost no almost no"
-      - "almost no no almost yes"
-      - "yes yes yes yes yes"
-    date: "2022-02-18"
-  - number: 242
-    score: 4
-    board:
-      - "⬛🟨⬛⬛⬛"
-      - "🟨🟨⬛🟨⬛"
-      - "🟩🟨🟩⬛🟩"
-      - "🟩🟩🟩🟩🟩"
-    boardWords:
-      - "no almost no no no"
-      - "almost almost no almost no"
-      - "yes almost yes no yes"
-      - "yes yes yes yes yes"
     won: true
-    date: "2022-02-16"
-  - number: 231
-    score: 4
-    board:
-      - "⬛⬛⬛⬛⬛"
-      - "🟩⬛⬛⬛🟩"
-      - "🟩🟩⬛🟨🟩"
-      - "🟩🟩🟩🟩🟩"
+    date: "2022-01-15"
     boardWords:
-      - "no no no no no"
-      - "yes no no no yes"
-      - "yes yes no almost yes"
+      - "yes no no no no"
+      - "no no almost yes almost"
       - "yes yes yes yes yes"
-    won: true
-    date: "2022-02-05"
-  - number: 217
-    score: 5
-    board:
-      - "⬛⬛⬛⬛🟩"
-      - "⬛⬛⬛🟨🟨"
-      - "🟨🟩🟨⬛🟩"
-      - "⬛🟩🟩🟩🟩"
-      - "🟩🟩🟩🟩🟩"
-    boardWords:
-      - "no no no no yes"
-      - "no no no almost almost"
-      - "almost yes almost no yes"
-      - "no yes yes yes yes"
-      - "yes yes yes yes yes"
-    won: true
-    date: "2022-01-22"
   - number: 213
     score: 5
     board:
@@ -88,15 +40,81 @@ games:
       - "yes yes no almost no"
       - "yes yes yes almost no"
       - "yes yes yes yes yes"
-  - number: 210
-    score: 3
+  - number: 217
+    score: 5
     board:
-      - "🟩⬛⬛⬛⬛"
-      - "⬛⬛🟨🟩🟨"
+      - "⬛⬛⬛⬛🟩"
+      - "⬛⬛⬛🟨🟨"
+      - "🟨🟩🟨⬛🟩"
+      - "⬛🟩🟩🟩🟩"
       - "🟩🟩🟩🟩🟩"
-    won: true
-    date: "2022-01-15"
     boardWords:
-      - "yes no no no no"
-      - "no no almost yes almost"
+      - "no no no no yes"
+      - "no no no almost almost"
+      - "almost yes almost no yes"
+      - "no yes yes yes yes"
       - "yes yes yes yes yes"
+    won: true
+    date: "2022-01-22"
+  - number: 231
+    score: 4
+    board:
+      - "⬛⬛⬛⬛⬛"
+      - "🟩⬛⬛⬛🟩"
+      - "🟩🟩⬛🟨🟩"
+      - "🟩🟩🟩🟩🟩"
+    boardWords:
+      - "no no no no no"
+      - "yes no no no yes"
+      - "yes yes no almost yes"
+      - "yes yes yes yes yes"
+    won: true
+    date: "2022-02-05"
+  - number: 242
+    score: 4
+    board:
+      - "⬛🟨⬛⬛⬛"
+      - "🟨🟨⬛🟨⬛"
+      - "🟩🟨🟩⬛🟩"
+      - "🟩🟩🟩🟩🟩"
+    boardWords:
+      - "no almost no no no"
+      - "almost almost no almost no"
+      - "yes almost yes no yes"
+      - "yes yes yes yes yes"
+    won: true
+    date: "2022-02-16"
+  - number: 243
+    score: 6
+    won: true
+    board:
+      - "⬛⬛⬛🟨🟩"
+      - "🟩⬛🟩⬛🟩"
+      - "🟩🟩🟩⬛🟩"
+      - "🟩🟩🟩⬛🟩"
+      - "🟩🟩🟩⬛🟩"
+      - "🟩🟩🟩🟩🟩"
+    boardWords:
+      - "no no no almost yes"
+      - "yes no yes no yes"
+      - "yes yes yes no yes"
+      - "yes yes yes no yes"
+      - "yes yes yes no yes"
+      - "yes yes yes yes yes"
+    date: "2022-02-18"
+  - number: 244
+    score: 5
+    won: true
+    board:
+      - "⬛⬛⬛⬛🟩"
+      - "⬛⬛🟨⬛🟩"
+      - "⬛🟨⬛🟨⬛"
+      - "🟨⬛⬛🟨🟩"
+      - "🟩🟩🟩🟩🟩"
+    boardWords:
+      - "no no no no yes"
+      - "no no almost no yes"
+      - "no almost no almost no"
+      - "almost no no almost yes"
+      - "yes yes yes yes yes"
+    date: "2022-02-18"
