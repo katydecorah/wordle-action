@@ -12782,10 +12782,9 @@ function wordle() {
                 game,
                 fileName,
             }));
-            const yaml = Object.assign(Object.assign({}, buildStatistics(games)), { games });
             (0,core.exportVariable)("IssueNumber", number);
             (0,core.exportVariable)("WordleSummary", `Wordle ${game.number} ${game.score}/6`);
-            yield returnWriteFile(fileName, yaml);
+            yield returnWriteFile(fileName, Object.assign(Object.assign({}, buildStatistics(games)), { games }));
         }
         catch (error) {
             (0,core.setFailed)(error.message);

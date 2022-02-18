@@ -23,13 +23,12 @@ export async function wordle() {
       game,
       fileName,
     })) as Game[];
-    const yaml = {
-      ...buildStatistics(games),
-      games,
-    };
     exportVariable("IssueNumber", number);
     exportVariable("WordleSummary", `Wordle ${game.number} ${game.score}/6`);
-    await returnWriteFile(fileName, yaml);
+    await returnWriteFile(fileName, {
+      ...buildStatistics(games),
+      games,
+    });
   } catch (error) {
     setFailed(error.message);
   }
