@@ -12705,23 +12705,24 @@ function addGame({ game, fileName, }) {
 
 ;// CONCATENATED MODULE: ./src/statistics.ts
 function buildStatistics(games) {
-    const sorted = games.sort((a, b) => new Date(b.date).valueOf() - new Date(a.date).valueOf());
+    const sorted = games.sort((a, b) => b.number - a.number);
     const totalPlayed = games.length;
     const totalWon = games.filter(({ won }) => won).length;
     return {
         totalPlayed,
         totalWon,
-        totalWonPercent: totalWon / totalPlayed,
+        totalWonPercent: (totalWon / totalPlayed).toFixed(0),
         streakCurrent: calcCurrentStreak(sorted),
         streakMax: calcMaxStreak(sorted),
         distribution: createDistribution(sorted),
     };
 }
 function createDistribution(games) {
-    return games.reduce((obj, game) => {
-        obj[game.score]++;
-        return obj;
-    }, { X: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 });
+    const distribution = { X: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 };
+    for (const { score } of games) {
+        distribution[score]++;
+    }
+    return distribution;
 }
 function calcCurrentStreak(games) {
     let currentStreak = 0;

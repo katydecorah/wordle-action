@@ -60,5 +60,6 @@ export type Statistics = {
     "3": number;
     "4": number;
     "5": number;
+    "6": number;
   };
 };
