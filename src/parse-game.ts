@@ -1,15 +1,6 @@
-import { Score, Board } from "./index";
+import { Game, Board } from "./index";
 
-export default function parseGame(
-  title: string,
-  body: string
-): {
-  gameNumber: number;
-  score: Score;
-  won: boolean;
-  board: Board;
-  boardWords: Board;
-} {
+export default function parseGame(title: string, body: string): Game {
   try {
     const split = title.split(" ");
     if (!split || split.length !== 3) {
@@ -17,16 +8,17 @@ export default function parseGame(
         "The GitHub Issue title is not in the correct format. Must be: `Wordle ### #/#`"
       );
     }
-    const gameNumber = parseInt(split[1]);
+    const number = parseInt(split[1]);
     const score = split[2][0] === "X" ? "X" : parseInt(split[2][0]);
     const board = checkBoard(body);
     const boardWords = board.map(emojiToWord);
     return {
-      gameNumber,
+      number,
       score,
       won: score !== "X",
       board,
       boardWords,
+      date: new Date().toISOString().slice(0, 10),
     };
   } catch (error) {
     throw new Error(error);

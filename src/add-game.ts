@@ -1,29 +1,13 @@
-import { Score, Board, Game } from "./index";
+import { Game } from "./index";
 import toJson from "./to-json";
 
 export default async function addGame({
-  gameNumber,
-  score,
-  board,
-  boardWords,
+  game,
   fileName,
-  won,
 }: {
-  gameNumber: number;
-  score: Score;
-  board: Board;
-  boardWords: Board;
+  game: Game;
   fileName: string;
-  won: boolean;
-}) {
+}): Promise<Game[]> {
   const wordleJson = (await toJson(fileName)) as Game[];
-  wordleJson.push({
-    number: gameNumber,
-    score,
-    board,
-    boardWords,
-    won,
-    date: new Date().toISOString().slice(0, 10),
-  });
-  return wordleJson.sort((a, b) => a.number - b.number);
+  return [...wordleJson, game].sort((a, b) => a.number - b.number);
 }
