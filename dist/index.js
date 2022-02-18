@@ -12684,8 +12684,7 @@ var add_game_awaiter = (undefined && undefined.__awaiter) || function (thisArg, 
 function addGame({ game, fileName, }) {
     return add_game_awaiter(this, void 0, void 0, function* () {
         const wordleJson = (yield toJson(fileName));
-        wordleJson.push(game);
-        return wordleJson.sort((a, b) => a.number - b.number);
+        return [...wordleJson, game].sort((a, b) => a.number - b.number);
     });
 }
 

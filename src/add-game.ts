@@ -9,6 +9,5 @@ export default async function addGame({
   fileName: string;
 }): Promise<Game[]> {
   const wordleJson = (await toJson(fileName)) as Game[];
-  wordleJson.push(game);
-  return wordleJson.sort((a, b) => a.number - b.number);
+  return [...wordleJson, game].sort((a, b) => a.number - b.number);
 }
