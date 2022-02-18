@@ -12741,18 +12741,38 @@ function dailyStreak(lastGame, index, game) {
 function calcMaxStreak(games) {
     let maxStreakArr = [];
     let maxStreakCounter = 0;
-    let lastGame = games[0].number;
     for (const [index, game] of games.entries()) {
-        if (game.won && dailyStreak(lastGame, index, game)) {
-            maxStreakCounter++;
-        }
-        if (game.won === false || games.length - 1 === index) {
+        // if you lost a game or missed a game, end the current streak.
+        if (lostOrBrokeStreak({ index, games, game })) {
             maxStreakArr = [...maxStreakArr, maxStreakCounter];
             maxStreakCounter = 0;
-            lastGame = game.number;
+        }
+        // if you win, add to streak counter.
+        // if a game broke streak, but won then this will start a new streak.
+        if (statusWon(game)) {
+            maxStreakCounter++;
+        }
+        // if it's the last game, end the current streak.
+        if (lastGame({ games, index })) {
+            maxStreakArr = [...maxStreakArr, maxStreakCounter];
         }
     }
-    return maxStreakArr.sort().reverse()[0];
+    return Math.max(...maxStreakArr);
+}
+function lostOrBrokeStreak({ index, games, game }) {
+    return statusBrokeStreak({ index, games, game }) || statusLost(game);
+}
+function statusBrokeStreak({ index, games, game }) {
+    return (index !== 0 && games[index - 1].number !== (game.number + 1));
+}
+function statusWon(game) {
+    return game.won;
+}
+function statusLost(game) {
+    return game.won === false;
+}
+function lastGame({ games, index }) {
+    return games.length - 1 === index;
 }
 
 ;// CONCATENATED MODULE: ./src/index.ts
