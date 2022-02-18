@@ -15,13 +15,11 @@ export default function buildStatistics(games: Game[]): Statistics {
 }
 
 function createDistribution(games: Game[]) {
-  return games.reduce(
-    (obj, game) => {
-      obj[game.score]++;
-      return obj;
-    },
-    { X: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 }
-  );
+  const distribution = { X: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 };
+  for (const { score } of games) {
+    distribution[score]++;
+  }
+  return distribution;
 }
 
 function calcCurrentStreak(games: Game[]) {
