@@ -7,6 +7,7 @@ import parseGame, {
 jest.mock("@actions/core");
 
 describe("parseGame", () => {
+  jest.useFakeTimers().setSystemTime(new Date("2022-01-18").getTime());
   test("works", () => {
     expect(
       parseGame(
@@ -28,7 +29,8 @@ describe("parseGame", () => {
         "no no almost yes almost",
         "yes yes yes yes yes",
       ],
-      gameNumber: 210,
+      number: 210,
+      date: "2022-01-18",
       score: 3,
       won: true,
     });
@@ -68,7 +70,8 @@ describe("parseGame", () => {
         "yes no no yes no",
         "yes no no yes no",
       ],
-      gameNumber: 208,
+      date: "2022-01-18",
+      number: 208,
       score: "X",
       won: false,
     });
@@ -111,7 +114,8 @@ describe("parseGame", () => {
         "yes yes yes no no",
         "yes yes yes yes yes",
       ],
-      gameNumber: 209,
+      date: "2022-01-18",
+      number: 209,
       score: 6,
       won: true,
     });

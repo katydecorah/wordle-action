@@ -5,19 +5,39 @@ Save Wordle scores to a YAML file. Pair it with the [iOS Shortcut](shortcut/READ
 ## Example output
 
 ```yaml
-- number: 210
-  score: 3
-  board:
-    - "🟩⬛⬛⬛⬛"
-    - "⬛⬛🟨🟩🟨"
-    - "🟩🟩🟩🟩🟩"
-  boardWords:
-    - "yes no no no no"
-    - "no no almost yes almost"
-    - "yes yes yes yes yes"
-  won: true
-  date: "2022-01-15"
+totalPlayed: 6
+totalWon: 6
+totalWonPercent: "100"
+streakCurrent: 1
+streakMax: 1
+distribution:
+  1: 0
+  2: 0
+  3: 1
+  4: 2
+  5: 3
+  6: 0
+  X: 0
+games:
+  - number: 244
+    score: 5
+    won: true
+    board:
+      - "⬛⬛⬛⬛🟩"
+      - "⬛⬛🟨⬛🟩"
+      - "⬛🟨⬛🟨⬛"
+      - "🟨⬛⬛🟨🟩"
+      - "🟩🟩🟩🟩🟩"
+    boardWords:
+      - "no no no no yes"
+      - "no no almost no yes"
+      - "no almost no almost no"
+      - "almost no no almost yes"
+      - "yes yes yes yes yes"
+    date: "2022-02-18"
 ```
+
+See [\_data/wordle.yml](https://github.com/katydecorah/wordle-to-yaml-action/blob/main/_data/wordle.yml) for an extended output.
 
 <!-- START GENERATED DOCUMENTATION -->
 
@@ -42,7 +62,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Wordle
-        uses: katydecorah/wordle-to-yaml-action@v1.0.2
+        uses: katydecorah/wordle-to-yaml-action@v2.0.1
       - name: Commit files
         run: |
           git config --local user.email "action@github.com"

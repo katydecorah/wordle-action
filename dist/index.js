@@ -8703,19 +8703,20 @@ function parseGame(title, body) {
         if (!split || split.length !== 3) {
             throw new Error("The GitHub Issue title is not in the correct format. Must be: `Wordle ### #/#`");
         }
-        const gameNumber = parseInt(split[1]);
+        const number = parseInt(split[1]);
         const score = split[2][0] === "X" ? "X" : parseInt(split[2][0]);
         const board = checkBoard(body);
         const won = score !== "X";
         const boardWords = board.map(emojiToWord);
         const altText = boardToAltText(boardWords, won);
         return {
-            gameNumber,
+            number,
             score,
             won,
             board,
             boardWords,
             altText,
+            date: new Date().toISOString().slice(0, 10),
         };
     }
     catch (error) {
@@ -8791,12 +8792,11 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
 };
 
 
-function returnWriteFile(fileName, games) {
+function returnWriteFile(fileName, yaml) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const data = (0,json_to_pretty_yaml/* stringify */.P)(games);
-            const promise = (0,promises_namespaceObject.writeFile)(fileName, data);
-            yield promise;
+            const data = (0,json_to_pretty_yaml/* stringify */.P)(yaml);
+            yield (0,promises_namespaceObject.writeFile)(fileName, data);
         }
         catch (error) {
             throw new Error(error);
@@ -12696,12 +12696,27 @@ function toJson(fileName) {
     return to_json_awaiter(this, void 0, void 0, function* () {
         try {
             const contents = (yield returnReadFile(fileName));
-            return contents && Array.isArray(load(contents)) ? load(contents) : [];
+            return parseYaml(contents);
         }
         catch (error) {
             throw new Error(error);
         }
     });
+}
+function parseYaml(contents) {
+    // empty file
+    if (!contents)
+        return [];
+    const json = load(contents);
+    // unable to parse file
+    if (!json)
+        return [];
+    // new format
+    if ("games" in json)
+        return json.games;
+    // legacy format
+    else
+        return json;
 }
 
 ;// CONCATENATED MODULE: ./src/add-game.ts
@@ -12715,20 +12730,83 @@ var add_game_awaiter = (undefined && undefined.__awaiter) || function (thisArg, 
     });
 };
 
-function addGame({ gameNumber, score, board, boardWords, altText, fileName, won, }) {
+function addGame({ game, fileName, }) {
     return add_game_awaiter(this, void 0, void 0, function* () {
-        const wordleJson = (yield toJson(fileName));
-        wordleJson.push({
-            number: gameNumber,
-            score,
-            board,
-            boardWords,
-            altText,
-            won,
-            date: new Date().toISOString().slice(0, 10),
-        });
-        return wordleJson.sort((a, b) => a.number - b.number);
+        const games = (yield toJson(fileName));
+        return [...games, game].sort((a, b) => a.number - b.number);
     });
+}
+
+;// CONCATENATED MODULE: ./src/statistics.ts
+function buildStatistics(games) {
+    const sorted = [...games].sort((a, b) => b.number - a.number);
+    const totalPlayed = sorted.length;
+    const totalWon = sorted.filter(({ won }) => won).length;
+    return {
+        totalPlayed,
+        totalWon,
+        totalWonPercent: ((totalWon / totalPlayed) * 100).toFixed(0),
+        streakCurrent: calcCurrentStreak(sorted),
+        streakMax: calcMaxStreak(sorted),
+        distribution: createDistribution(sorted),
+    };
+}
+function createDistribution(games) {
+    const distribution = { X: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 };
+    for (const { score } of games) {
+        distribution[score]++;
+    }
+    return distribution;
+}
+function calcCurrentStreak(games) {
+    let currentStreak = 0;
+    const lastGame = games[0].number;
+    for (const [index, game] of games.entries()) {
+        if (game.won && dailyStreak(lastGame, index, game))
+            currentStreak++;
+        else
+            break;
+    }
+    return currentStreak;
+}
+function dailyStreak(lastGame, index, game) {
+    return lastGame - index === game.number;
+}
+function calcMaxStreak(games) {
+    let maxStreakArr = [];
+    let maxStreakCounter = 0;
+    for (const [index, game] of games.entries()) {
+        // if you lost a game or missed a game, end the current streak.
+        if (lostOrBrokeStreak({ index, games, game })) {
+            maxStreakArr = [...maxStreakArr, maxStreakCounter];
+            maxStreakCounter = 0;
+        }
+        // if you win, add to streak counter.
+        // if a game broke streak, but won then this will start a new streak.
+        if (statusWon(game)) {
+            maxStreakCounter++;
+        }
+        // if it's the last game, end the current streak.
+        if (lastGame({ games, index })) {
+            maxStreakArr = [...maxStreakArr, maxStreakCounter];
+        }
+    }
+    return Math.max(...maxStreakArr);
+}
+function lostOrBrokeStreak({ index, games, game }) {
+    return statusBrokeStreak({ index, games, game }) || statusLost(game);
+}
+function statusBrokeStreak({ index, games, game }) {
+    return index !== 0 && games[index - 1].number !== game.number + 1;
+}
+function statusWon(game) {
+    return game.won;
+}
+function statusLost(game) {
+    return game.won === false;
+}
+function lastGame({ games, index }) {
+    return games.length - 1 === index;
 }
 
 ;// CONCATENATED MODULE: ./src/index.ts
@@ -12747,6 +12825,7 @@ var src_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argu
 
 
 
+
 function wordle() {
     return src_awaiter(this, void 0, void 0, function* () {
         try {
@@ -12758,12 +12837,15 @@ function wordle() {
             if (!title || !body) {
                 throw new Error("Unable to parse GitHub issue.");
             }
-            (0,core.exportVariable)("IssueNumber", number);
-            const formattedGame = parseGame(title, body);
-            (0,core.exportVariable)("WordleSummary", `Wordle ${formattedGame.gameNumber} ${formattedGame.score}/6`);
+            const game = parseGame(title, body);
             const fileName = (0,core.getInput)("wordleFileName");
-            const games = (yield addGame(Object.assign(Object.assign({}, formattedGame), { fileName })));
-            yield returnWriteFile(fileName, games);
+            const games = (yield addGame({
+                game,
+                fileName,
+            }));
+            (0,core.exportVariable)("IssueNumber", number);
+            (0,core.exportVariable)("WordleSummary", `Wordle ${game.number} ${game.score}/6`);
+            yield returnWriteFile(fileName, Object.assign(Object.assign({}, buildStatistics(games)), { games }));
         }
         catch (error) {
             (0,core.setFailed)(error.message);

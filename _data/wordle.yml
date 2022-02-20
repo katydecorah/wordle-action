@@ -1,4 +1,17 @@
-
+totalPlayed: 7
+totalWon: 7
+totalWonPercent: "100"
+streakCurrent: 3
+streakMax: 3
+distribution:
+  1: 0
+  2: 0
+  3: 1
+  4: 2
+  5: 3
+  6: 1
+  X: 0
+games:
   - number: 210
     score: 3
     board:
@@ -71,3 +84,37 @@
       - "yes yes yes yes yes"
     won: true
     date: "2022-02-16"
+  - number: 243
+    score: 6
+    won: true
+    board:
+      - "⬛⬛⬛🟨🟩"
+      - "🟩⬛🟩⬛🟩"
+      - "🟩🟩🟩⬛🟩"
+      - "🟩🟩🟩⬛🟩"
+      - "🟩🟩🟩⬛🟩"
+      - "🟩🟩🟩🟩🟩"
+    boardWords:
+      - "no no no almost yes"
+      - "yes no yes no yes"
+      - "yes yes yes no yes"
+      - "yes yes yes no yes"
+      - "yes yes yes no yes"
+      - "yes yes yes yes yes"
+    date: "2022-02-18"
+  - number: 244
+    score: 5
+    won: true
+    board:
+      - "⬛⬛⬛⬛🟩"
+      - "⬛⬛🟨⬛🟩"
+      - "⬛🟨⬛🟨⬛"
+      - "🟨⬛⬛🟨🟩"
+      - "🟩🟩🟩🟩🟩"
+    boardWords:
+      - "no no no no yes"
+      - "no no almost no yes"
+      - "no almost no almost no"
+      - "almost no no almost yes"
+      - "yes yes yes yes yes"
+    date: "2022-02-18"
