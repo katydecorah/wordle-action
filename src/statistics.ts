@@ -4,22 +4,33 @@ export default function buildStatistics(games: Game[]): Statistics {
   const sorted = [...games].sort((a, b) => b.number - a.number);
   const totalPlayed = sorted.length;
   const totalWon = sorted.filter(({ won }) => won).length;
+  const distribution = createDistribution(sorted);
   return {
     totalPlayed,
     totalWon,
     totalWonPercent: ((totalWon / totalPlayed) * 100).toFixed(0),
     streakCurrent: calcCurrentStreak(sorted),
     streakMax: calcMaxStreak(sorted),
-    distribution: createDistribution(sorted),
+    distribution,
+    distributionPercent: createDistributionPercent(distribution),
   };
 }
 
-function createDistribution(games: Game[]) {
+function createDistribution(games: Game[]): Distribution {
   const distribution = { X: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 };
   for (const { score } of games) {
     distribution[score]++;
   }
   return distribution;
+}
+
+function createDistributionPercent(distribution: Distribution): Distribution {
+  const max = Math.max(...Object.values(distribution));
+  const distributionPercent = { X: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 };
+  for (const score of Object.keys(distribution)) {
+    distributionPercent[score] = (distribution[score] / max) * 100;
+  }
+  return distributionPercent;
 }
 
 function calcCurrentStreak(games: Game[]) {
@@ -69,11 +80,11 @@ function statusBrokeStreak({ index, games, game }) {
   return index !== 0 && games[index - 1].number !== game.number + 1;
 }
 
-function statusWon(game) {
+function statusWon(game: Game) {
   return game.won;
 }
 
-function statusLost(game) {
+function statusLost(game: Game) {
   return game.won === false;
 }
 
@@ -81,19 +92,22 @@ function lastGame({ games, index }) {
   return games.length - 1 === index;
 }
 
+type Distribution = {
+  X: number;
+  "1": number;
+  "2": number;
+  "3": number;
+  "4": number;
+  "5": number;
+  "6": number;
+};
+
 export type Statistics = {
   totalPlayed: number;
   totalWon: number;
   totalWonPercent: string;
   streakCurrent: number;
   streakMax: number;
-  distribution: {
-    X: number;
-    "1": number;
-    "2": number;
-    "3": number;
-    "4": number;
-    "5": number;
-    "6": number;
-  };
+  distribution: Distribution;
+  distributionPercent: Distribution;
 };
