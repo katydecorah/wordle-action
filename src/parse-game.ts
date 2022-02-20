@@ -53,8 +53,9 @@ export function emojiToWord(row: string) {
 
 export function boardToAltText(boardWords: string[], won: boolean) {
   const gameStatus = won ? "won" : "lost";
+  const gameRows = boardWords.length;
   const gameGuesses = won
-    ? ` in ${boardWords.length} guess${boardWords.length === 1 ? "" : "es"}`
+    ? ` in ${gameRows} guess${gameRows === 1 ? "" : "es"}`
     : "";
 
   return `The player ${gameStatus} the game${gameGuesses}.`;
