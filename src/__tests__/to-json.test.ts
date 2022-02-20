@@ -2,18 +2,66 @@ import toJson from "../to-json";
 
 jest.mock("@actions/core");
 
-let mockRead = Promise.resolve("- gameNumber: 100");
+let mockReadFile = Promise.resolve("- number: 100");
 
 jest.mock("../read-file", () => {
-  return jest.fn().mockImplementation(() => mockRead);
+  return jest.fn().mockImplementation(() => mockReadFile);
 });
 
 describe("toJson", () => {
   test("works", async () => {
-    expect(await toJson("my-file.yml")).toEqual([{ gameNumber: 100 }]);
+    expect(await toJson("my-file.yml")).toEqual([{ number: 100 }]);
   });
   test("error", async () => {
-    mockRead = Promise.reject("Error");
+    mockReadFile = Promise.reject("Error");
     await expect(toJson("my-file.yml")).rejects.toThrow("Error");
+  });
+
+  test("can add wordle game to filled yaml file", async () => {
+    mockReadFile = Promise.resolve(`  - number: 210
+    score: 3
+    board:
+      - "🟩⬛⬛⬛⬛"
+      - "⬛⬛🟨🟩🟨"
+      - "🟩🟩🟩🟩🟩"
+    won: true
+    date: "2022-01-15"
+    boardWords:
+      - "yes no no no no"
+      - "no no almost yes almost"
+      - "yes yes yes yes yes"
+`);
+    expect(await toJson("my-file.yml")).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "board": Array [
+            "🟩⬛⬛⬛⬛",
+            "⬛⬛🟨🟩🟨",
+            "🟩🟩🟩🟩🟩",
+          ],
+          "boardWords": Array [
+            "yes no no no no",
+            "no no almost yes almost",
+            "yes yes yes yes yes",
+          ],
+          "date": "2022-01-15",
+          "number": 210,
+          "score": 3,
+          "won": true,
+        },
+      ]
+    `);
+  });
+
+  test("can add wordle game to empty yaml file", async () => {
+    mockReadFile = Promise.resolve("");
+    expect(await toJson("my-file.yml")).toMatchInlineSnapshot(`Array []`);
+  });
+
+  test("can add wordle game to yaml file with whitespace", async () => {
+    mockReadFile = Promise.resolve(`
+
+  `);
+    expect(await toJson("my-file.yml")).toMatchInlineSnapshot(`Array []`);
   });
 });

@@ -8697,7 +8697,7 @@ var core = __nccwpck_require__(2186);
 // EXTERNAL MODULE: ./node_modules/@actions/github/lib/github.js
 var github = __nccwpck_require__(5438);
 ;// CONCATENATED MODULE: ./src/parse-game.ts
-function parseGame(title, body) {
+function parseGame({ title, body, }) {
     try {
         const split = title.split(" ");
         if (!split || split.length !== 3) {
@@ -8752,12 +8752,21 @@ function createAltText(boardWords, won) {
         : "";
     return `The player ${gameStatus} the game${gameGuesses}.`;
 }
+function buildGames(previousGames, newGame) {
+    const parseGames = previousGames.map(prepareGameForParsing).map(parseGame);
+    parseGames.push(newGame);
+    return parseGames.sort((a, b) => a.number - b.number);
+}
+function prepareGameForParsing(game) {
+    return {
+        title: `Wordle ${game.number} ${game.score}/6`,
+        body: game.board.join("\n"),
+    };
+}
 
 ;// CONCATENATED MODULE: external "fs/promises"
 const promises_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("fs/promises");
-// EXTERNAL MODULE: ./node_modules/json-to-pretty-yaml/index.js
-var json_to_pretty_yaml = __nccwpck_require__(6760);
-;// CONCATENATED MODULE: ./src/write-file.ts
+;// CONCATENATED MODULE: ./src/read-file.ts
 var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -8768,32 +8777,8 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
     });
 };
 
-
-function returnWriteFile(fileName, yaml) {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const data = (0,json_to_pretty_yaml/* stringify */.P)(yaml);
-            yield (0,promises_namespaceObject.writeFile)(fileName, data);
-        }
-        catch (error) {
-            throw new Error(error);
-        }
-    });
-}
-
-;// CONCATENATED MODULE: ./src/read-file.ts
-var read_file_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-
 function returnReadFile(fileName) {
-    return read_file_awaiter(this, void 0, void 0, function* () {
+    return __awaiter(this, void 0, void 0, function* () {
         try {
             const promise = (0,promises_namespaceObject.readFile)(fileName, "utf-8");
             return yield promise;
@@ -12696,8 +12681,10 @@ function parseYaml(contents) {
         return json;
 }
 
-;// CONCATENATED MODULE: ./src/add-game.ts
-var add_game_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+// EXTERNAL MODULE: ./node_modules/json-to-pretty-yaml/index.js
+var json_to_pretty_yaml = __nccwpck_require__(6760);
+;// CONCATENATED MODULE: ./src/write-file.ts
+var write_file_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -12707,10 +12694,16 @@ var add_game_awaiter = (undefined && undefined.__awaiter) || function (thisArg, 
     });
 };
 
-function addGame({ game, fileName, }) {
-    return add_game_awaiter(this, void 0, void 0, function* () {
-        const games = (yield toJson(fileName));
-        return [...games, game].sort((a, b) => a.number - b.number);
+
+function returnWriteFile(fileName, yaml) {
+    return write_file_awaiter(this, void 0, void 0, function* () {
+        try {
+            const data = (0,json_to_pretty_yaml/* stringify */.P)(yaml);
+            yield (0,promises_namespaceObject.writeFile)(fileName, data);
+        }
+        catch (error) {
+            throw new Error(error);
+        }
     });
 }
 
@@ -12806,6 +12799,7 @@ var src_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argu
 function wordle() {
     return src_awaiter(this, void 0, void 0, function* () {
         try {
+            const fileName = (0,core.getInput)("wordleFileName");
             if (!github.context.payload.issue) {
                 (0,core.setFailed)("Cannot find GitHub issue");
                 return;
@@ -12814,14 +12808,11 @@ function wordle() {
             if (!title || !body) {
                 throw new Error("Unable to parse GitHub issue.");
             }
-            const game = parseGame(title, body);
-            const fileName = (0,core.getInput)("wordleFileName");
-            const games = (yield addGame({
-                game,
-                fileName,
-            }));
+            const newGame = parseGame({ title, body });
             (0,core.exportVariable)("IssueNumber", number);
-            (0,core.exportVariable)("WordleSummary", `Wordle ${game.number} ${game.score}/6`);
+            (0,core.exportVariable)("WordleSummary", `Wordle ${newGame.number} ${newGame.score}/6`);
+            const previousGames = (yield toJson(fileName));
+            const games = buildGames(previousGames, newGame);
             yield returnWriteFile(fileName, Object.assign(Object.assign({}, buildStatistics(games)), { games }));
         }
         catch (error) {

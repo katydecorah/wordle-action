@@ -1,6 +1,12 @@
 import { Game, Board } from "./index";
 
-export default function parseGame(title: string, body: string): Game {
+export default function parseGame({
+  title,
+  body,
+}: {
+  title: string;
+  body: string;
+}): Game {
   try {
     const split = title.split(" ");
     if (!split || split.length !== 3) {
@@ -59,4 +65,17 @@ export function createAltText(boardWords: string[], won: boolean) {
     : "";
 
   return `The player ${gameStatus} the game${gameGuesses}.`;
+}
+
+export function buildGames(previousGames: Game[], newGame: Game) {
+  const parseGames = previousGames.map(prepareGameForParsing).map(parseGame);
+  parseGames.push(newGame);
+  return parseGames.sort((a, b) => a.number - b.number);
+}
+
+function prepareGameForParsing(game: Game): { title: string; body: string } {
+  return {
+    title: `Wordle ${game.number} ${game.score}/6`,
+    body: game.board.join("\n"),
+  };
 }
