@@ -69,12 +69,18 @@ describe("index", () => {
           },
           "games": Array [
             Object {
+              "altText": "The player won the game in 3 guesses.",
               "board": Array [
                 "🟩⬛⬛⬛⬛",
                 "⬛⬛🟨🟩🟨",
                 "🟩🟩🟩🟩🟩",
               ],
-              "date": "2022-01-15",
+              "boardWords": Array [
+                "yes no no no no",
+                "no no almost yes almost",
+                "yes yes yes yes yes",
+              ],
+              "date": "2022-01-18",
               "number": 210,
               "score": 3,
               "won": true,

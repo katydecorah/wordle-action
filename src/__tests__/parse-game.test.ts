@@ -10,12 +10,12 @@ describe("parseGame", () => {
   jest.useFakeTimers().setSystemTime(new Date("2022-01-18").getTime());
   test("works", () => {
     expect(
-      parseGame(
-        "Wordle 210 3/6",
-        `🟩⬛⬛⬛⬛
+      parseGame({
+        title: "Wordle 210 3/6",
+        body: `🟩⬛⬛⬛⬛
 ⬛⬛🟨🟩🟨
-🟩🟩🟩🟩🟩`
-      )
+🟩🟩🟩🟩🟩`,
+      })
     ).toEqual({
       altText: "The player won the game in 3 guesses.",
       board: ["🟩⬛⬛⬛⬛", "⬛⬛🟨🟩🟨", "🟩🟩🟩🟩🟩"],
@@ -30,15 +30,15 @@ describe("parseGame", () => {
       won: true,
     });
     expect(
-      parseGame(
-        "Wordle 208 X/6",
-        `⬛⬛⬛⬛🟨
+      parseGame({
+        title: "Wordle 208 X/6",
+        body: `⬛⬛⬛⬛🟨
 ⬛🟨⬛⬛⬛
 ⬛🟨⬛🟩⬛
 🟩⬛⬛⬛🟨
 🟩⬛⬛🟩⬛
-🟩⬛⬛🟩⬛`
-      )
+🟩⬛⬛🟩⬛`,
+      })
     ).toEqual({
       altText: "The player lost the game.",
       board: [
@@ -63,9 +63,9 @@ describe("parseGame", () => {
       won: false,
     });
     expect(
-      parseGame(
-        "Wordle 209 6/6",
-        `Wordle 209 6/6
+      parseGame({
+        title: "Wordle 209 6/6",
+        body: `Wordle 209 6/6
 
 🟩⬛🟨⬛🟨
 🟩🟩⬛⬛⬛
@@ -73,8 +73,8 @@ describe("parseGame", () => {
 🟩⬛🟩⬛⬛
 🟩🟩🟩⬛⬛
 🟩🟩🟩🟩🟩
-`
-      )
+`,
+      })
     ).toEqual({
       altText: "The player won the game in 6 guesses.",
 

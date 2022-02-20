@@ -1,6 +1,12 @@
 import { Game, Board } from "./index";
 
-export default function parseGame(title: string, body: string): Game {
+export default function parseGame({
+  title,
+  body,
+}: {
+  title: string;
+  body: string;
+}): Game {
   try {
     const split = title.split(" ");
     if (!split || split.length !== 3) {
