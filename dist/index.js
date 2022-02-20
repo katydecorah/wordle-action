@@ -12785,15 +12785,10 @@ var src_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argu
 
 
 
-function simplify(game) {
-    return {
-        title: `Wordle ${game.number} ${game.score}/6`,
-        body: game.board.join("\n"),
-    };
-}
 function wordle() {
     return src_awaiter(this, void 0, void 0, function* () {
         try {
+            const fileName = (0,core.getInput)("wordleFileName");
             if (!github.context.payload.issue) {
                 (0,core.setFailed)("Cannot find GitHub issue");
                 return;
@@ -12803,14 +12798,13 @@ function wordle() {
                 throw new Error("Unable to parse GitHub issue.");
             }
             const newGame = parseGame({ title, body });
-            const fileName = (0,core.getInput)("wordleFileName");
+            (0,core.exportVariable)("IssueNumber", number);
+            (0,core.exportVariable)("WordleSummary", `Wordle ${newGame.number} ${newGame.score}/6`);
             const currentGames = (yield toJson(fileName));
-            const combineGames = [...currentGames, newGame].map(simplify);
+            const combineGames = [...currentGames, newGame].map(prepareGamesForFormatting);
             const games = combineGames
                 .map(parseGame)
                 .sort((a, b) => a.number - b.number);
-            (0,core.exportVariable)("IssueNumber", number);
-            (0,core.exportVariable)("WordleSummary", `Wordle ${newGame.number} ${newGame.score}/6`);
             yield returnWriteFile(fileName, Object.assign(Object.assign({}, buildStatistics(games)), { games }));
         }
         catch (error) {
@@ -12819,6 +12813,12 @@ function wordle() {
     });
 }
 /* harmony default export */ const src = (wordle());
+function prepareGamesForFormatting(game) {
+    return {
+        title: `Wordle ${game.number} ${game.score}/6`,
+        body: game.board.join("\n"),
+    };
+}
 
 })();
 
