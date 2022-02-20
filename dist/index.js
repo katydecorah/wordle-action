@@ -8753,12 +8753,11 @@ function createAltText(boardWords, won) {
     return `The player ${gameStatus} the game${gameGuesses}.`;
 }
 function buildGames(previousGames, newGame) {
-    const preparePreviousGames = [...previousGames].map(prepareGamesForFormatting);
-    const parseGames = preparePreviousGames.map(parseGame);
+    const parseGames = previousGames.map(prepareGameForParsing).map(parseGame);
     parseGames.push(newGame);
     return parseGames.sort((a, b) => a.number - b.number);
 }
-function prepareGamesForFormatting(game) {
+function prepareGameForParsing(game) {
     return {
         title: `Wordle ${game.number} ${game.score}/6`,
         body: game.board.join("\n"),
