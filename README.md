@@ -5,36 +5,33 @@ Save Wordle scores to a YAML file. Pair it with the [iOS Shortcut](shortcut/READ
 ## Example output
 
 ```yaml
-totalPlayed: 6
-totalWon: 6
+totalPlayed: 9
+totalWon: 9
 totalWonPercent: "100"
-streakCurrent: 1
-streakMax: 1
+streakCurrent: 5
+streakMax: 5
 distribution:
   1: 0
   2: 0
-  3: 1
+  3: 2
   4: 2
-  5: 3
-  6: 0
+  5: 4
+  6: 1
   X: 0
 games:
-  - number: 244
-    score: 5
+  - number: 210
+    score: 3
     won: true
     board:
-      - "⬛⬛⬛⬛🟩"
-      - "⬛⬛🟨⬛🟩"
-      - "⬛🟨⬛🟨⬛"
-      - "🟨⬛⬛🟨🟩"
+      - "🟩⬛⬛⬛⬛"
+      - "⬛⬛🟨🟩🟨"
       - "🟩🟩🟩🟩🟩"
     boardWords:
-      - "no no no no yes"
-      - "no no almost no yes"
-      - "no almost no almost no"
-      - "almost no no almost yes"
+      - "yes no no no no"
+      - "no no almost yes almost"
       - "yes yes yes yes yes"
-    date: "2022-02-18"
+    altText: "The player won the game in 3 guesses."
+    date: "2022-01-15"
 ```
 
 See [\_data/wordle.yml](https://github.com/katydecorah/wordle-to-yaml-action/blob/main/_data/wordle.yml) for an extended output.
