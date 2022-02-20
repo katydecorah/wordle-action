@@ -12801,16 +12801,17 @@ function wordle() {
             (0,core.exportVariable)("IssueNumber", number);
             (0,core.exportVariable)("WordleSummary", `Wordle ${newGame.number} ${newGame.score}/6`);
             const currentGames = (yield toJson(fileName));
-            const combineGames = [...currentGames, newGame].map(prepareGamesForFormatting);
-            const games = combineGames
-                .map(parseGame)
-                .sort((a, b) => a.number - b.number);
+            const games = buildGames(currentGames, newGame);
             yield returnWriteFile(fileName, Object.assign(Object.assign({}, buildStatistics(games)), { games }));
         }
         catch (error) {
             (0,core.setFailed)(error.message);
         }
     });
+}
+function buildGames(currentGames, newGame) {
+    const formatted = [...currentGames, newGame].map(prepareGamesForFormatting);
+    return formatted.map(parseGame).sort((a, b) => a.number - b.number);
 }
 /* harmony default export */ const src = (wordle());
 function prepareGamesForFormatting(game) {

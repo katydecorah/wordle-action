@@ -20,6 +20,7 @@ export async function wordle() {
     if (!title || !body) {
       throw new Error("Unable to parse GitHub issue.");
     }
+
     const newGame = parseGame({ title, body });
     exportVariable("IssueNumber", number);
     exportVariable(
@@ -28,12 +29,7 @@ export async function wordle() {
     );
 
     const currentGames = (await toJson(fileName)) as Game[];
-    const combineGames = [...currentGames, newGame].map(
-      prepareGamesForFormatting
-    );
-    const games = combineGames
-      .map(parseGame)
-      .sort((a, b) => a.number - b.number);
+    const games = buildGames(currentGames, newGame);
 
     await returnWriteFile(fileName, {
       ...buildStatistics(games),
@@ -42,6 +38,11 @@ export async function wordle() {
   } catch (error) {
     setFailed(error.message);
   }
+}
+
+function buildGames(currentGames: Game[], newGame: Game) {
+  const formatted = [...currentGames, newGame].map(prepareGamesForFormatting);
+  return formatted.map(parseGame).sort((a, b) => a.number - b.number);
 }
 
 export default wordle();
