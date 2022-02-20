@@ -67,6 +67,15 @@ describe("index", () => {
             "6": 0,
             "X": 0,
           },
+          "distributionPercent": Object {
+            "1": 0,
+            "2": 0,
+            "3": 100,
+            "4": 0,
+            "5": 100,
+            "6": 0,
+            "X": 0,
+          },
           "games": Array [
             Object {
               "altText": "The player won the game in 3 guesses.",

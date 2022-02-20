@@ -12713,13 +12713,15 @@ function buildStatistics(games) {
     const sorted = [...games].sort((a, b) => b.number - a.number);
     const totalPlayed = sorted.length;
     const totalWon = sorted.filter(({ won }) => won).length;
+    const distribution = createDistribution(sorted);
     return {
         totalPlayed,
         totalWon,
         totalWonPercent: ((totalWon / totalPlayed) * 100).toFixed(0),
         streakCurrent: calcCurrentStreak(sorted),
         streakMax: calcMaxStreak(sorted),
-        distribution: createDistribution(sorted),
+        distribution,
+        distributionPercent: createDistributionPercent(distribution),
     };
 }
 function createDistribution(games) {
@@ -12728,6 +12730,14 @@ function createDistribution(games) {
         distribution[score]++;
     }
     return distribution;
+}
+function createDistributionPercent(distribution) {
+    const max = Math.max(...Object.values(distribution));
+    const distributionPercent = { X: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 };
+    for (const score of Object.keys(distribution)) {
+        distributionPercent[score] = (distribution[score] / max) * 100;
+    }
+    return distributionPercent;
 }
 function calcCurrentStreak(games) {
     let currentStreak = 0;
