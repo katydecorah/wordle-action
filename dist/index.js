@@ -8708,7 +8708,7 @@ function parseGame(title, body) {
         const board = checkBoard(body);
         const won = score !== "X";
         const boardWords = board.map(emojiToWord);
-        const altText = boardToAltText(boardWords, won);
+        const altText = createAltText(boardWords, won);
         return {
             number,
             score,
@@ -8744,7 +8744,7 @@ function emojiToWord(row) {
         .replace(/🟧/g, "almost ")
         .trim();
 }
-function boardToAltText(boardWords, won) {
+function createAltText(boardWords, won) {
     const gameStatus = won ? "won" : "lost";
     const gameRows = boardWords.length;
     const gameGuesses = won

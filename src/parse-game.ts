@@ -13,7 +13,7 @@ export default function parseGame(title: string, body: string): Game {
     const board = checkBoard(body);
     const won = score !== "X";
     const boardWords = board.map(emojiToWord);
-    const altText = boardToAltText(boardWords, won);
+    const altText = createAltText(boardWords, won);
     return {
       number,
       score,
@@ -51,7 +51,7 @@ export function emojiToWord(row: string) {
     .trim();
 }
 
-export function boardToAltText(boardWords: string[], won: boolean) {
+export function createAltText(boardWords: string[], won: boolean) {
   const gameStatus = won ? "won" : "lost";
   const gameRows = boardWords.length;
   const gameGuesses = won

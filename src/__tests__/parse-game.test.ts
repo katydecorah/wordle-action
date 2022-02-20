@@ -1,7 +1,7 @@
 import parseGame, {
   checkBoard,
   emojiToWord,
-  boardToAltText,
+  createAltText,
 } from "../parse-game";
 
 jest.mock("@actions/core");
@@ -145,18 +145,18 @@ test("emojiToWord", () => {
   );
 });
 
-test("boardToAltText", () => {
+test("createAltText", () => {
   expect(
-    boardToAltText(
+    createAltText(
       ["yes no no no no", "no no almost yes almost", "yes yes yes yes yes"],
       true
     )
   ).toMatchInlineSnapshot(`"The player won the game in 3 guesses."`);
-  expect(boardToAltText(["yes yes yes yes yes"], true)).toMatchInlineSnapshot(
+  expect(createAltText(["yes yes yes yes yes"], true)).toMatchInlineSnapshot(
     `"The player won the game in 1 guess."`
   );
   expect(
-    boardToAltText(
+    createAltText(
       [
         "yes no no no no",
         "no no almost yes almost",
