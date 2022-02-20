@@ -8697,7 +8697,7 @@ var core = __nccwpck_require__(2186);
 // EXTERNAL MODULE: ./node_modules/@actions/github/lib/github.js
 var github = __nccwpck_require__(5438);
 ;// CONCATENATED MODULE: ./src/parse-game.ts
-function parseGame({ title, body, }) {
+function parseGame({ title, body, date, }) {
     try {
         const split = title.split(" ");
         if (!split || split.length !== 3) {
@@ -8716,7 +8716,7 @@ function parseGame({ title, body, }) {
             board,
             boardWords,
             altText,
-            date: new Date().toISOString().slice(0, 10),
+            date: date || new Date().toISOString().slice(0, 10),
         };
     }
     catch (error) {
@@ -8761,6 +8761,7 @@ function prepareGameForParsing(game) {
     return {
         title: `Wordle ${game.number} ${game.score}/6`,
         body: game.board.join("\n"),
+        date: game.date,
     };
 }
 

@@ -3,9 +3,11 @@ import { Game, Board } from "./index";
 export default function parseGame({
   title,
   body,
+  date,
 }: {
   title: string;
   body: string;
+  date?: string;
 }): Game {
   try {
     const split = title.split(" ");
@@ -27,7 +29,7 @@ export default function parseGame({
       board,
       boardWords,
       altText,
-      date: new Date().toISOString().slice(0, 10),
+      date: date || new Date().toISOString().slice(0, 10),
     };
   } catch (error) {
     throw new Error(error);
@@ -73,9 +75,14 @@ export function buildGames(previousGames: Game[], newGame: Game) {
   return parseGames.sort((a, b) => a.number - b.number);
 }
 
-function prepareGameForParsing(game: Game): { title: string; body: string } {
+function prepareGameForParsing(game: Game): {
+  title: string;
+  body: string;
+  date?: string;
+} {
   return {
     title: `Wordle ${game.number} ${game.score}/6`,
     body: game.board.join("\n"),
+    date: game.date,
   };
 }

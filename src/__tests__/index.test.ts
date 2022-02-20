@@ -80,7 +80,7 @@ describe("index", () => {
                 "no no almost yes almost",
                 "yes yes yes yes yes",
               ],
-              "date": "2022-01-18",
+              "date": "2022-01-15",
               "number": 210,
               "score": 3,
               "won": true,
