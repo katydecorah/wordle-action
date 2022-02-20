@@ -1,4 +1,8 @@
-import parseGame, { checkBoard, emojiToWord } from "../parse-game";
+import parseGame, {
+  checkBoard,
+  emojiToWord,
+  createAltText,
+} from "../parse-game";
 
 jest.mock("@actions/core");
 
@@ -13,6 +17,7 @@ describe("parseGame", () => {
 🟩🟩🟩🟩🟩`
       )
     ).toEqual({
+      altText: "The player won the game in 3 guesses.",
       board: ["🟩⬛⬛⬛⬛", "⬛⬛🟨🟩🟨", "🟩🟩🟩🟩🟩"],
       boardWords: [
         "yes no no no no",
@@ -35,6 +40,7 @@ describe("parseGame", () => {
 🟩⬛⬛🟩⬛`
       )
     ).toEqual({
+      altText: "The player lost the game.",
       board: [
         "⬛⬛⬛⬛🟨",
         "⬛🟨⬛⬛⬛",
@@ -70,6 +76,8 @@ describe("parseGame", () => {
 `
       )
     ).toEqual({
+      altText: "The player won the game in 6 guesses.",
+
       board: [
         "🟩⬛🟨⬛🟨",
         "🟩🟩⬛⬛⬛",
@@ -135,4 +143,30 @@ test("emojiToWord", () => {
   expect(emojiToWord("🟧🟧🟧🟧🟧")).toEqual(
     "almost almost almost almost almost"
   );
+});
+
+test("createAltText", () => {
+  expect(
+    createAltText(
+      ["yes no no no no", "no no almost yes almost", "yes yes yes yes yes"],
+      true
+    )
+  ).toMatchInlineSnapshot(`"The player won the game in 3 guesses."`);
+  expect(createAltText(["yes yes yes yes yes"], true)).toMatchInlineSnapshot(
+    `"The player won the game in 1 guess."`
+  );
+  expect(
+    createAltText(
+      [
+        "yes no no no no",
+        "no no almost yes almost",
+        "no no almost yes almost",
+        "no no almost yes almost",
+        "no no almost yes almost",
+        "no yes yes yes yes",
+      ],
+
+      false
+    )
+  ).toMatchInlineSnapshot(`"The player lost the game."`);
 });

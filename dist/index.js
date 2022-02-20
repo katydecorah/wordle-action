@@ -8706,13 +8706,16 @@ function parseGame(title, body) {
         const number = parseInt(split[1]);
         const score = split[2][0] === "X" ? "X" : parseInt(split[2][0]);
         const board = checkBoard(body);
+        const won = score !== "X";
         const boardWords = board.map(emojiToWord);
+        const altText = createAltText(boardWords, won);
         return {
             number,
             score,
-            won: score !== "X",
+            won,
             board,
             boardWords,
+            altText,
             date: new Date().toISOString().slice(0, 10),
         };
     }
@@ -8740,6 +8743,14 @@ function emojiToWord(row) {
         .replace(/🟨/g, "almost ")
         .replace(/🟧/g, "almost ")
         .trim();
+}
+function createAltText(boardWords, won) {
+    const gameStatus = won ? "won" : "lost";
+    const gameRows = boardWords.length;
+    const gameGuesses = won
+        ? ` in ${gameRows} guess${gameRows === 1 ? "" : "es"}`
+        : "";
+    return `The player ${gameStatus} the game${gameGuesses}.`;
 }
 
 ;// CONCATENATED MODULE: external "fs/promises"

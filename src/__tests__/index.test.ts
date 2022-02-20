@@ -80,6 +80,7 @@ describe("index", () => {
               "won": true,
             },
             Object {
+              "altText": "The player won the game in 5 guesses.",
               "board": Array [
                 "🟩⬛🟨⬛⬛",
                 "🟩🟩⬛⬛⬛",

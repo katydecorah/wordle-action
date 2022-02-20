@@ -47,6 +47,7 @@ export type Game = {
   boardWords: Board;
   date: string;
   won: boolean;
+  altText: string;
 };
 
 export type SquareEmoji = "⬜" | "⬛" | "🟨" | "🟩";
