@@ -80,14 +80,7 @@ describe("index", () => {
               "won": true,
             },
             Object {
-              "altText": Array [
-                "The player won the game in 5 guesses.",
-                "In the first guess: The first letter is correct. The second letter is not in the word. The third letter is in the word, but in the wrong spot. The fourth letter is not in the word. The fifth letter is not in the word.",
-                "In the second guess: The first letter is correct. The second letter is correct. The third letter is not in the word. The fourth letter is not in the word. The fifth letter is not in the word.",
-                "In the third guess: The first letter is correct. The second letter is correct. The third letter is not in the word. The fourth letter is in the word, but in the wrong spot. The fifth letter is not in the word.",
-                "In the fourth guess: The first letter is correct. The second letter is correct. The third letter is correct. The fourth letter is in the word, but in the wrong spot. The fifth letter is not in the word.",
-                "In the fifth guess: All letters are correct.",
-              ],
+              "altText": "The player won the game in 5 guesses.",
               "board": Array [
                 "🟩⬛🟨⬛⬛",
                 "🟩🟩⬛⬛⬛",

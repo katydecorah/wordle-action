@@ -52,41 +52,10 @@ export function emojiToWord(row: string) {
 }
 
 export function boardToAltText(boardWords: string[], won: boolean) {
-  const position = {
-    0: "first",
-    1: "second",
-    2: "third",
-    3: "fourth",
-    4: "fifth",
-    5: "sixth",
-  };
-
-  const status = {
-    no: "not in the word.",
-    yes: "correct.",
-    almost: "in the word, but in the wrong spot.",
-  };
-
-  const rowToWords = (row: string, index: number) => {
-    const wonWithLastGuess = won && index === boardWords.length - 1;
-    const describeRow = `${row.split(" ").map(lettertoWords).join(" ")}`;
-    return `In the ${position[index]} guess: ${
-      wonWithLastGuess ? "All letters are correct." : describeRow
-    }`;
-  };
-
-  const lettertoWords = (letter: string, index: number) =>
-    `The ${position[index]} letter is ${status[letter]}`;
-
-  const describedRows = boardWords.map(rowToWords);
-  const luckyGuess = boardWords.length === 1 && won;
   const gameStatus = won ? "won" : "lost";
   const gameGuesses = won
     ? ` in ${boardWords.length} guess${boardWords.length === 1 ? "" : "es"}`
     : "";
 
-  return [
-    `The player ${gameStatus} the game${gameGuesses}.`,
-    ...(luckyGuess ? [] : [...describedRows]),
-  ];
+  return `The player ${gameStatus} the game${gameGuesses}.`;
 }
