@@ -66,3 +66,19 @@ export function createAltText(boardWords: string[], won: boolean) {
 
   return `The player ${gameStatus} the game${gameGuesses}.`;
 }
+
+export function buildGames(previousGames: Game[], newGame: Game) {
+  const preparePreviousGames = [...previousGames].map(
+    prepareGamesForFormatting
+  );
+  const parseGames = preparePreviousGames.map(parseGame);
+  parseGames.push(newGame);
+  return parseGames.sort((a, b) => a.number - b.number);
+}
+
+function prepareGamesForFormatting(game): { title: string; body: string } {
+  return {
+    title: `Wordle ${game.number} ${game.score}/6`,
+    body: game.board.join("\n"),
+  };
+}

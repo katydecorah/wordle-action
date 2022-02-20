@@ -2,7 +2,7 @@
 
 import { getInput, exportVariable, setFailed } from "@actions/core";
 import * as github from "@actions/github";
-import parseGame from "./parse-game";
+import parseGame, { buildGames } from "./parse-game";
 import toJson from "./to-json";
 import returnWriteFile from "./write-file";
 import buildStatistics, { Statistics } from "./statistics";
@@ -28,8 +28,8 @@ export async function wordle() {
       `Wordle ${newGame.number} ${newGame.score}/6`
     );
 
-    const currentGames = (await toJson(fileName)) as Game[];
-    const games = buildGames(currentGames, newGame);
+    const previousGames = (await toJson(fileName)) as Game[];
+    const games = buildGames(previousGames, newGame);
 
     await returnWriteFile(fileName, {
       ...buildStatistics(games),
@@ -38,11 +38,6 @@ export async function wordle() {
   } catch (error) {
     setFailed(error.message);
   }
-}
-
-function buildGames(currentGames: Game[], newGame: Game) {
-  const formatted = [...currentGames, newGame].map(prepareGamesForFormatting);
-  return formatted.map(parseGame).sort((a, b) => a.number - b.number);
 }
 
 export default wordle();
@@ -65,11 +60,4 @@ export type SquareEmoji = "⬜" | "⬛" | "🟨" | "🟩";
 
 export interface Yaml extends Statistics {
   games: Game[];
-}
-
-function prepareGamesForFormatting(game): { title: string; body: string } {
-  return {
-    title: `Wordle ${game.number} ${game.score}/6`,
-    body: game.board.join("\n"),
-  };
 }

@@ -8752,6 +8752,18 @@ function createAltText(boardWords, won) {
         : "";
     return `The player ${gameStatus} the game${gameGuesses}.`;
 }
+function buildGames(previousGames, newGame) {
+    const preparePreviousGames = [...previousGames].map(prepareGamesForFormatting);
+    const parseGames = preparePreviousGames.map(parseGame);
+    parseGames.push(newGame);
+    return parseGames.sort((a, b) => a.number - b.number);
+}
+function prepareGamesForFormatting(game) {
+    return {
+        title: `Wordle ${game.number} ${game.score}/6`,
+        body: game.board.join("\n"),
+    };
+}
 
 ;// CONCATENATED MODULE: external "fs/promises"
 const promises_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("fs/promises");
@@ -12800,8 +12812,8 @@ function wordle() {
             const newGame = parseGame({ title, body });
             (0,core.exportVariable)("IssueNumber", number);
             (0,core.exportVariable)("WordleSummary", `Wordle ${newGame.number} ${newGame.score}/6`);
-            const currentGames = (yield toJson(fileName));
-            const games = buildGames(currentGames, newGame);
+            const previousGames = (yield toJson(fileName));
+            const games = buildGames(previousGames, newGame);
             yield returnWriteFile(fileName, Object.assign(Object.assign({}, buildStatistics(games)), { games }));
         }
         catch (error) {
@@ -12809,17 +12821,7 @@ function wordle() {
         }
     });
 }
-function buildGames(currentGames, newGame) {
-    const formatted = [...currentGames, newGame].map(prepareGamesForFormatting);
-    return formatted.map(parseGame).sort((a, b) => a.number - b.number);
-}
 /* harmony default export */ const src = (wordle());
-function prepareGamesForFormatting(game) {
-    return {
-        title: `Wordle ${game.number} ${game.score}/6`,
-        body: game.board.join("\n"),
-    };
-}
 
 })();
 
