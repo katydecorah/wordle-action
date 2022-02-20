@@ -8697,7 +8697,7 @@ var core = __nccwpck_require__(2186);
 // EXTERNAL MODULE: ./node_modules/@actions/github/lib/github.js
 var github = __nccwpck_require__(5438);
 ;// CONCATENATED MODULE: ./src/parse-game.ts
-function parseGame({ title, body }) {
+function parseGame({ title, body, }) {
     try {
         const split = title.split(" ");
         if (!split || split.length !== 3) {
@@ -12788,7 +12788,7 @@ var src_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argu
 function simplify(game) {
     return {
         title: `Wordle ${game.number} ${game.score}/6`,
-        body: game.board.join('\n')
+        body: game.board.join("\n"),
     };
 }
 function wordle() {
@@ -12806,7 +12806,9 @@ function wordle() {
             const fileName = (0,core.getInput)("wordleFileName");
             const currentGames = (yield toJson(fileName));
             const combineGames = [...currentGames, newGame].map(simplify);
-            const games = combineGames.map(parseGame).sort((a, b) => a.number - b.number);
+            const games = combineGames
+                .map(parseGame)
+                .sort((a, b) => a.number - b.number);
             (0,core.exportVariable)("IssueNumber", number);
             (0,core.exportVariable)("WordleSummary", `Wordle ${newGame.number} ${newGame.score}/6`);
             yield returnWriteFile(fileName, Object.assign(Object.assign({}, buildStatistics(games)), { games }));
