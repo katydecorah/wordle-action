@@ -57,7 +57,7 @@ jobs:
     if: contains( github.event.issue.labels.*.name, 'wordle')
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Wordle
         uses: katydecorah/wordle-to-yaml-action@v3.1.0
       - name: Commit files
