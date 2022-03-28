@@ -67,7 +67,7 @@ jobs:
           git commit -am "${{ env.WordleSummary }}"
           git push
       - name: Close issue
-        uses: peter-evans/close-issue@v1
+        uses: peter-evans/close-issue@v2
         with:
           issue-number: "${{ env.IssueNumber }}"
           comment: "Added ${{ env.WordleSummary }}"
