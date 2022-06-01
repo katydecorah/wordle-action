@@ -22,7 +22,7 @@
     "@typescript-eslint/eslint-plugin": "^5.17.0",
     "@typescript-eslint/parser": "^5.21.0",
     "@vercel/ncc": "^0.33.4",
-    "eslint": "^8.12.0",
+    "eslint": "^8.16.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-jest": "^26.1.5",
     "husky": "^7.0.0",
