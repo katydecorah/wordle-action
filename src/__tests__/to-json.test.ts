@@ -32,14 +32,14 @@ describe("toJson", () => {
       - "yes yes yes yes yes"
 `);
     expect(await toJson("my-file.yml")).toMatchInlineSnapshot(`
-      Array [
-        Object {
-          "board": Array [
+      [
+        {
+          "board": [
             "🟩⬛⬛⬛⬛",
             "⬛⬛🟨🟩🟨",
             "🟩🟩🟩🟩🟩",
           ],
-          "boardWords": Array [
+          "boardWords": [
             "yes no no no no",
             "no no almost yes almost",
             "yes yes yes yes yes",
@@ -55,13 +55,13 @@ describe("toJson", () => {
 
   test("can add wordle game to empty yaml file", async () => {
     mockReadFile = Promise.resolve("");
-    expect(await toJson("my-file.yml")).toMatchInlineSnapshot(`Array []`);
+    expect(await toJson("my-file.yml")).toMatchInlineSnapshot(`[]`);
   });
 
   test("can add wordle game to yaml file with whitespace", async () => {
     mockReadFile = Promise.resolve(`
 
   `);
-    expect(await toJson("my-file.yml")).toMatchInlineSnapshot(`Array []`);
+    expect(await toJson("my-file.yml")).toMatchInlineSnapshot(`[]`);
   });
 });

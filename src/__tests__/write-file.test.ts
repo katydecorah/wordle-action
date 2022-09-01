@@ -17,7 +17,7 @@ describe("returnWriteFile", () => {
       { gameNumber: 200 },
     ]);
     expect(writeFile.mock.calls[0]).toMatchInlineSnapshot(`
-      Array [
+      [
         "my-file.yml",
         "
         - gameNumber: 100

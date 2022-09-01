@@ -4,8 +4,8 @@ describe("buildStatistics", () => {
   test("single game, won", () => {
     expect(buildStatistics([{ won: true, score: 3, number: 1 }]))
       .toMatchInlineSnapshot(`
-      Object {
-        "distribution": Object {
+      {
+        "distribution": {
           "1": 0,
           "2": 0,
           "3": 1,
@@ -14,7 +14,7 @@ describe("buildStatistics", () => {
           "6": 0,
           "X": 0,
         },
-        "distributionPercent": Object {
+        "distributionPercent": {
           "1": 0,
           "2": 0,
           "3": 100,
@@ -34,8 +34,8 @@ describe("buildStatistics", () => {
   test("single game, lost", () => {
     expect(buildStatistics([{ won: false, score: "X", number: 1 }]))
       .toMatchInlineSnapshot(`
-      Object {
-        "distribution": Object {
+      {
+        "distribution": {
           "1": 0,
           "2": 0,
           "3": 0,
@@ -44,7 +44,7 @@ describe("buildStatistics", () => {
           "6": 0,
           "X": 1,
         },
-        "distributionPercent": Object {
+        "distributionPercent": {
           "1": 0,
           "2": 0,
           "3": 0,
@@ -69,8 +69,8 @@ describe("buildStatistics", () => {
         { won: true, score: "5", number: 3 },
       ])
     ).toMatchInlineSnapshot(`
-      Object {
-        "distribution": Object {
+      {
+        "distribution": {
           "1": 0,
           "2": 0,
           "3": 2,
@@ -79,7 +79,7 @@ describe("buildStatistics", () => {
           "6": 0,
           "X": 0,
         },
-        "distributionPercent": Object {
+        "distributionPercent": {
           "1": 0,
           "2": 0,
           "3": 100,
@@ -104,8 +104,8 @@ describe("buildStatistics", () => {
         { won: true, score: "3", number: 3 },
       ])
     ).toMatchInlineSnapshot(`
-      Object {
-        "distribution": Object {
+      {
+        "distribution": {
           "1": 0,
           "2": 0,
           "3": 2,
@@ -114,7 +114,7 @@ describe("buildStatistics", () => {
           "6": 0,
           "X": 1,
         },
-        "distributionPercent": Object {
+        "distributionPercent": {
           "1": 0,
           "2": 0,
           "3": 100,
@@ -139,8 +139,8 @@ describe("buildStatistics", () => {
         { won: false, score: "X", number: 3 },
       ])
     ).toMatchInlineSnapshot(`
-      Object {
-        "distribution": Object {
+      {
+        "distribution": {
           "1": 0,
           "2": 0,
           "3": 0,
@@ -149,7 +149,7 @@ describe("buildStatistics", () => {
           "6": 0,
           "X": 3,
         },
-        "distributionPercent": Object {
+        "distributionPercent": {
           "1": 0,
           "2": 0,
           "3": 0,
@@ -178,8 +178,8 @@ describe("buildStatistics", () => {
         { won: true, score: "5", number: 6 },
       ])
     ).toMatchInlineSnapshot(`
-      Object {
-        "distribution": Object {
+      {
+        "distribution": {
           "1": 1,
           "2": 1,
           "3": 0,
@@ -188,7 +188,7 @@ describe("buildStatistics", () => {
           "6": 0,
           "X": 1,
         },
-        "distributionPercent": Object {
+        "distributionPercent": {
           "1": 50,
           "2": 50,
           "3": 0,
@@ -217,8 +217,8 @@ describe("buildStatistics", () => {
         { won: true, score: "5", number: 7 },
       ])
     ).toMatchInlineSnapshot(`
-      Object {
-        "distribution": Object {
+      {
+        "distribution": {
           "1": 1,
           "2": 1,
           "3": 0,
@@ -227,7 +227,7 @@ describe("buildStatistics", () => {
           "6": 0,
           "X": 0,
         },
-        "distributionPercent": Object {
+        "distributionPercent": {
           "1": 50,
           "2": 50,
           "3": 0,
@@ -255,8 +255,8 @@ describe("buildStatistics", () => {
         { won: true, score: "5", number: 7 },
       ])
     ).toMatchInlineSnapshot(`
-      Object {
-        "distribution": Object {
+      {
+        "distribution": {
           "1": 1,
           "2": 1,
           "3": 0,
@@ -265,7 +265,7 @@ describe("buildStatistics", () => {
           "6": 0,
           "X": 0,
         },
-        "distributionPercent": Object {
+        "distributionPercent": {
           "1": 50,
           "2": 50,
           "3": 0,

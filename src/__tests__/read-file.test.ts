@@ -8,7 +8,7 @@ describe("returnReadFile", () => {
     const readSpy = jest.spyOn(promises, "readFile").mockImplementation();
     await returnReadFile("my-file.yml");
     expect(readSpy.mock.calls[0]).toMatchInlineSnapshot(`
-      Array [
+      [
         "my-file.yml",
         "utf-8",
       ]

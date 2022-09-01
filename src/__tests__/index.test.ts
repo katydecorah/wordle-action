@@ -55,10 +55,10 @@ describe("index", () => {
     );
     expect(setFailed).not.toHaveBeenCalledWith();
     expect(returnWriteFile.mock.calls[0]).toMatchInlineSnapshot(`
-      Array [
+      [
         "oh-my-wordle.yml",
-        Object {
-          "distribution": Object {
+        {
+          "distribution": {
             "1": 0,
             "2": 0,
             "3": 1,
@@ -67,7 +67,7 @@ describe("index", () => {
             "6": 0,
             "X": 0,
           },
-          "distributionPercent": Object {
+          "distributionPercent": {
             "1": 0,
             "2": 0,
             "3": 100,
@@ -76,15 +76,15 @@ describe("index", () => {
             "6": 0,
             "X": 0,
           },
-          "games": Array [
-            Object {
+          "games": [
+            {
               "altText": "The player won the game in 3 guesses.",
-              "board": Array [
+              "board": [
                 "🟩⬛⬛⬛⬛",
                 "⬛⬛🟨🟩🟨",
                 "🟩🟩🟩🟩🟩",
               ],
-              "boardWords": Array [
+              "boardWords": [
                 "yes no no no no",
                 "no no almost yes almost",
                 "yes yes yes yes yes",
@@ -94,16 +94,16 @@ describe("index", () => {
               "score": 3,
               "won": true,
             },
-            Object {
+            {
               "altText": "The player won the game in 5 guesses.",
-              "board": Array [
+              "board": [
                 "🟩⬛🟨⬛⬛",
                 "🟩🟩⬛⬛⬛",
                 "🟩🟩⬛🟨⬛",
                 "🟩🟩🟩🟨⬛",
                 "🟩🟩🟩🟩🟩",
               ],
-              "boardWords": Array [
+              "boardWords": [
                 "yes no almost no no",
                 "yes yes no no no",
                 "yes yes no almost no",
