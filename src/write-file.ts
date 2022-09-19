@@ -1,11 +1,9 @@
-import { Yaml } from ".";
+import { Json } from ".";
 import { writeFile } from "fs/promises";
-import { stringify } from "json-to-pretty-yaml";
 
-export default async function returnWriteFile(fileName: string, yaml: Yaml) {
+export default async function returnWriteFile(fileName: string, data: Json) {
   try {
-    const data = stringify(yaml);
-    await writeFile(fileName, data);
+    await writeFile(fileName, JSON.stringify(data, null, 2));
   } catch (error) {
     throw new Error(error);
   }

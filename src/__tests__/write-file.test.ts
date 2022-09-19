@@ -12,22 +12,26 @@ jest.mock("fs/promises", () => {
 
 describe("returnWriteFile", () => {
   test("works", async () => {
-    await returnWriteFile("my-file.yml", [
+    await returnWriteFile("my-file.json", [
       { gameNumber: 100 },
       { gameNumber: 200 },
     ]);
     expect(writeFile.mock.calls[0]).toMatchInlineSnapshot(`
       [
-        "my-file.yml",
-        "
-        - gameNumber: 100
-        - gameNumber: 200
-      ",
+        "my-file.json",
+        "[
+        {
+          "gameNumber": 100
+        },
+        {
+          "gameNumber": 200
+        }
+      ]",
       ]
     `);
   });
   test("error", async () => {
     mockWriteFile = Promise.reject("Error");
-    await expect(returnWriteFile("my-file.yml", [])).rejects.toThrow("Error");
+    await expect(returnWriteFile("my-file.json", [])).rejects.toThrow("Error");
   });
 });

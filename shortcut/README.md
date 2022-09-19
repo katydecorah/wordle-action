@@ -1,4 +1,4 @@
-# Wordle to yaml shortcut
+# Wordle shortcut
 
 To quickly use the action, download the [Wordle (example).shortcut](Wordle (example).shortcut).
 
