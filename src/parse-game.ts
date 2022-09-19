@@ -11,7 +11,7 @@ export default function parseGame({
     const titleString = game.match(/Wordle (\d\d\d) (\d|X)\/6/);
     if (!titleString) {
       throw new Error(
-        `The GitHub Issue title is not in the correct format. Must be: \`Wordle ### #/#\``
+        `The Wordle title is not in the correct format. Must be: \`Wordle ### #/#\``
       );
     }
     const number = parseInt(titleString[1]);

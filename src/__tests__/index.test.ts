@@ -275,7 +275,7 @@ describe("index", () => {
     });
     await wordle();
     expect(setFailed).toHaveBeenCalledWith(
-      "Error: The GitHub Issue title is not in the correct format. Must be: `Wordle ### #/#`"
+      "Error: The Wordle title is not in the correct format. Must be: `Wordle ### #/#`"
     );
   });
 });
