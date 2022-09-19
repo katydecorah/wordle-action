@@ -1,13 +1,13 @@
 {
-  "totalPlayed": 12,
-  "totalWon": 12,
+  "totalPlayed": 11,
+  "totalWon": 11,
   "totalWonPercent": "100",
   "streakCurrent": 1,
   "streakMax": 5,
   "distribution": {
     "1": 0,
     "2": 0,
-    "3": 5,
+    "3": 4,
     "4": 2,
     "5": 4,
     "6": 1,
@@ -17,9 +17,9 @@
     "1": 0,
     "2": 0,
     "3": 100,
-    "4": 40,
-    "5": 80,
-    "6": 20,
+    "4": 50,
+    "5": 100,
+    "6": 25,
     "X": 0
   },
   "games": [
@@ -201,23 +201,6 @@
       ],
       "altText": "The player won the game in 3 guesses.",
       "date": "2022-02-20"
-    },
-    {
-      "number": 457,
-      "score": 3,
-      "won": true,
-      "board": [
-        "⬛⬛🟨⬛🟩",
-        "🟨🟩🟩⬛🟩",
-        "🟩🟩🟩🟩🟩"
-      ],
-      "boardWords": [
-        "no no almost no yes",
-        "almost yes yes no yes",
-        "yes yes yes yes yes"
-      ],
-      "altText": "The player won the game in 3 guesses.",
-      "date": "2022-09-19"
     },
     {
       "number": 457,
