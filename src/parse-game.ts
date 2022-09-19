@@ -8,16 +8,15 @@ export default function parseGame({
   date?: string;
 }): Game {
   try {
-    const [titleString, body] = game.split("\n\n");
-    if (!titleString.match(/Wordle \d\d\d (\d|X)\/6/)) {
+    const titleString = game.match(/Wordle (\d\d\d) (\d|X)\/6/);
+    if (!titleString) {
       throw new Error(
         `The GitHub Issue title is not in the correct format. Must be: \`Wordle ### #/#\``
       );
     }
-    const title = titleString.split(" ");
-    const number = parseInt(title[1]);
-    const score = title[2][0] === "X" ? "X" : parseInt(title[2][0]);
-    const board = checkBoard(body);
+    const number = parseInt(titleString[1]);
+    const score = titleString[2] === "X" ? "X" : parseInt(titleString[2]);
+    const board = checkBoard(game, titleString[0]);
     const won = score !== "X";
     const boardWords = board.map(emojiToWord);
     const altText = createAltText(boardWords, won);
@@ -35,9 +34,15 @@ export default function parseGame({
   }
 }
 
-export function checkBoard(body: string): Board {
+export function checkBoard(game: string, title: string): Board {
+  const body = game
+    .replace(title, "")
+    .replace(/\n\n/g, "\n")
+    .replace(/\n/g, " ")
+    .trim();
+
   const board = body
-    .split("\n")
+    .split(" ")
     .map((row) => row.replace(/\r/, "").trim())
     .filter(String)
     .filter((row) => !row.startsWith("Wordle"));

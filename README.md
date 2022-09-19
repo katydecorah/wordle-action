@@ -1,6 +1,6 @@
 # wordle-to-yaml-action
 
-Save Wordle scores to a YAML file. Pair it with the [iOS Shortcut](shortcut/README.md) to automatically [create a respository dispatch event](https://docs.github.com/en/rest/repos/repos#create-a-repository-dispatch-event).
+Save Wordle scores to a YAML file. Pair it with the [iOS Shortcut](shortcut/README.md) to automatically [create a workflow dispatch event](https://docs.github.com/en/rest/actions/workflows#create-a-workflow-dispatch-event). Alternatively, use the **Run workflow** option from the "Actions" tab to paste in a recently played game to trigger the action.
 
 ## Example output
 
@@ -46,9 +46,12 @@ To use this action, create a new workflow in `.github/workflows` and modify it a
 name: Wordle
 
 on:
-  repository_dispatch:
-    types: [wordle]
-  workflow_dispatch: # enables run button on github.com
+  workflow_dispatch:
+    inputs:
+      game:
+        description: Wordle game
+        required: true
+        type: text
 
 jobs:
   update_library:
@@ -76,7 +79,7 @@ jobs:
 
 ## Send an event
 
-To trigger the action, you will [create a respository dispatch event](https://docs.github.com/en/rest/repos/repos#create-a-repository-dispatch-event) with the Wordle game.
+To trigger the action, you will [create a worfklow dispatch event](https://docs.github.com/en/rest/actions/workflows#create-a-workflow-dispatch-event) with the Wordle game.
 
 The [iOS Shortcut](shortcut/README.md) helps format and send the event.
 
@@ -85,7 +88,7 @@ The [iOS Shortcut](shortcut/README.md) helps format and send the event.
 ```js
 {
   "event_type": "wordle", // Optional. This helps you filter events in the workflow, in case you have more than one.
-  "client_payload": {
+  "inputs": {
     "game": "", // Required. The Wordle game as formatted by the "Share" option seen after completing a game.
     "date": "", // Optional. The date you finished the book in YYYY-MM-DD format. The default date is today.
   }

@@ -101,6 +101,32 @@ describe("parseGame", () => {
       won: true,
     });
   });
+
+  test("works, from inputs", () => {
+    expect(
+      parseGame({
+        game: `Wordle 457 3/6  ⬛⬛🟨⬛🟩 🟨🟩🟩⬛🟩 🟩🟩🟩🟩🟩`,
+      })
+    ).toMatchInlineSnapshot(`
+      {
+        "altText": "The player won the game in 3 guesses.",
+        "board": [
+          "⬛⬛🟨⬛🟩",
+          "🟨🟩🟩⬛🟩",
+          "🟩🟩🟩🟩🟩",
+        ],
+        "boardWords": [
+          "no no almost no yes",
+          "almost yes yes no yes",
+          "yes yes yes yes yes",
+        ],
+        "date": "2022-01-18",
+        "number": 457,
+        "score": 3,
+        "won": true,
+      }
+    `);
+  });
 });
 
 describe("checkBoard", () => {
