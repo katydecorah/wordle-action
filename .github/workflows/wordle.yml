@@ -10,10 +10,6 @@ on:
         description: Wordle game
         required: true
         type: text
-      date:
-        description: Date you played the game
-        required: false
-        type: date
 
 jobs:
   update_library:
