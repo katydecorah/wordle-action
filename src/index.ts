@@ -1,6 +1,6 @@
 "use strict";
 
-import { getInput, exportVariable, setFailed } from "@actions/core";
+import { getInput, exportVariable, setFailed, info } from "@actions/core";
 import * as github from "@actions/github";
 import parseGame, { buildGames } from "./parse-game";
 import toJson from "./to-json";
@@ -9,8 +9,10 @@ import buildStatistics, { Statistics } from "./statistics";
 
 export async function wordle() {
   try {
+    info(JSON.stringify(github.context.payload, null, 2));
+
     // Get client_payload
-    const payload = github.context.payload.client_payload as GamePayload;
+    const payload = github.context.payload.inputs as Inputs;
     // Validate client_payload
     if (!payload) return setFailed("Missing `client_payload`");
     const { game, date } = payload;
@@ -40,7 +42,7 @@ export default wordle();
 
 export type Board = string[];
 
-export type GamePayload = {
+export type Inputs = {
   game: string;
   date?: string;
 };
