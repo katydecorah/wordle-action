@@ -1,6 +1,6 @@
 # wordle-to-yaml-action
 
-Save Wordle scores to a YAML file. Pair it with the [iOS Shortcut](shortcut/README.md) to automatically [create a respository dispatch event](https://docs.github.com/en/rest/repos/repos#create-a-repository-dispatch-event).
+Save Wordle scores to a YAML file. Pair it with the [iOS Shortcut](shortcut/README.md) to automatically [create a respository dispatch event](https://docs.github.com/en/rest/repos/repos#create-a-repository-dispatch-event). Alternatively, use the **Run workflow** option from the "Actions" tab to paste in a recently played game to trigger the action.
 
 ## Example output
 
