@@ -48,7 +48,13 @@ name: Wordle
 on:
   repository_dispatch:
     types: [wordle]
-  workflow_dispatch: # enables run button on github.com
+  # Trigger from github.com
+  workflow_dispatch:
+    inputs:
+      game:
+        description: Wordle game
+        required: true
+        type: text
 
 jobs:
   update_library:
