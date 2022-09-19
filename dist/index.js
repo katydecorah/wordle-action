@@ -13920,15 +13920,14 @@ var src_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argu
 function wordle() {
     return src_awaiter(this, void 0, void 0, function* () {
         try {
-            (0,core.info)(JSON.stringify(github.context.payload, null, 2));
-            // Get client_payload
-            const payload = github.context.payload.inputs;
-            // Validate client_payload
-            if (!payload)
-                return (0,core.setFailed)("Missing `client_payload`");
-            const { game, date } = payload;
+            // Get inputs
+            const inputs = github.context.payload.inputs;
+            // Validate inputs
+            if (!inputs)
+                return (0,core.setFailed)("Missing `inputs`");
+            const { game, date } = inputs;
             if (!game)
-                return (0,core.setFailed)("Missing `game` in `client_payload`");
+                return (0,core.setFailed)("Missing `inputs.game`");
             const fileName = (0,core.getInput)("wordleFileName");
             const newGame = parseGame({ game, date });
             (0,core.exportVariable)("WordleSummary", `Wordle ${newGame.number} ${newGame.score}/6`);

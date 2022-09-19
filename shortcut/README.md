@@ -14,4 +14,4 @@ If playing from your phone:
 
 1. After your next game of Wordle, click the **Share** button from the Wordle overlay.
 2. Click **Wordle** from the sharesheet.
-3. The action will automatically create the dispatch event.
+3. The action will automatically create the workflow event.
