@@ -46,15 +46,14 @@ To use this action, create a new workflow in `.github/workflows` and modify it a
 name: Wordle
 
 on:
-  issues:
-    types: opened
+  repository_dispatch:
+    types: [wordle]
+  workflow_dispatch: # enables run button on github.com
 
 jobs:
   update_library:
     runs-on: macOS-latest
     name: Wordle
-    # only continue if issue has "wordle" label
-    if: contains( github.event.issue.labels.*.name, 'wordle')
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -62,15 +61,11 @@ jobs:
         uses: katydecorah/wordle-to-yaml-action@v3.1.0
       - name: Commit files
         run: |
+          git pull
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git commit -am "${{ env.WordleSummary }}"
           git push
-      - name: Close issue
-        uses: peter-evans/close-issue@v2
-        with:
-          issue-number: "${{ env.IssueNumber }}"
-          comment: "Added ${{ env.WordleSummary }}"
 ```
 
 ## Action options
