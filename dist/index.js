@@ -9809,7 +9809,7 @@ function parseGame({ game, date, }) {
     try {
         const titleString = game.match(/Wordle (\d\d\d) (\d|X)\/6/);
         if (!titleString) {
-            throw new Error(`The GitHub Issue title is not in the correct format. Must be: \`Wordle ### #/#\``);
+            throw new Error(`The Wordle title is not in the correct format. Must be: \`Wordle ### #/#\``);
         }
         const number = parseInt(titleString[1]);
         const score = titleString[2] === "X" ? "X" : parseInt(titleString[2]);

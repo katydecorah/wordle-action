@@ -1,4 +1,4 @@
-# wordle-to-yaml-action
+# wordle-action
 
 Save Wordle scores to a YAML file. Pair it with the [iOS Shortcut](shortcut/README.md) to automatically [create a workflow dispatch event](https://docs.github.com/en/rest/actions/workflows#create-a-workflow-dispatch-event). Alternatively, use the **Run workflow** option from the "Actions" tab to paste in a recently played game to trigger the action.
 
@@ -34,7 +34,7 @@ games:
     date: "2022-01-15"
 ```
 
-See [\_data/wordle.yml](https://github.com/katydecorah/wordle-to-yaml-action/blob/main/_data/wordle.yml) for an extended output.
+See [\_data/wordle.yml](https://github.com/katydecorah/wordle-action/blob/main/_data/wordle.yml) for an extended output.
 
 <!-- START GENERATED DOCUMENTATION -->
 
