@@ -13922,6 +13922,7 @@ function wordle() {
         try {
             // Get inputs
             const inputs = github.context.payload.inputs;
+            (0,core.debug)(JSON.stringify(inputs, null, 2));
             // Validate inputs
             if (!inputs)
                 return (0,core.setFailed)("Missing `inputs`");
