@@ -32,7 +32,7 @@ describe("index", () => {
     Object.defineProperty(github, "context", {
       value: {
         payload: {
-          client_payload: {
+          inputs: {
             game: `Wordle 213 5/6
 
 🟩⬛🟨⬛⬛
@@ -130,30 +130,28 @@ describe("index", () => {
       },
     });
     await wordle();
-    expect(setFailed).toHaveBeenCalledWith("Missing `client_payload`");
+    expect(setFailed).toHaveBeenCalledWith("Missing `inputs`");
   });
 
   test("error, missing game", async () => {
     Object.defineProperty(github, "context", {
       value: {
         payload: {
-          client_payload: {
+          inputs: {
             date: "2022-02-02",
           },
         },
       },
     });
     await wordle();
-    expect(setFailed).toHaveBeenCalledWith(
-      "Missing `game` in `client_payload`"
-    );
+    expect(setFailed).toHaveBeenCalledWith("Missing `inputs.game`");
   });
 
   test("error, bad board", async () => {
     Object.defineProperty(github, "context", {
       value: {
         payload: {
-          client_payload: {
+          inputs: {
             game: `"Wordle 213 5/6
 
 🟩⬛🟨⬛⬛
@@ -177,7 +175,7 @@ describe("index", () => {
     Object.defineProperty(github, "context", {
       value: {
         payload: {
-          client_payload: {
+          inputs: {
             game: `🟩⬛🟨⬛⬛
 🟩🟩⬛⬛⬛
 🟩🟩⬛🟨⬛

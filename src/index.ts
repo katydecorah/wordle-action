@@ -9,12 +9,12 @@ import buildStatistics, { Statistics } from "./statistics";
 
 export async function wordle() {
   try {
-    // Get client_payload
-    const payload = github.context.payload.client_payload as GamePayload;
-    // Validate client_payload
-    if (!payload) return setFailed("Missing `client_payload`");
-    const { game, date } = payload;
-    if (!game) return setFailed("Missing `game` in `client_payload`");
+    // Get inputs
+    const inputs = github.context.payload.inputs as Inputs;
+    // Validate inputs
+    if (!inputs) return setFailed("Missing `inputs`");
+    const { game, date } = inputs;
+    if (!game) return setFailed("Missing `inputs.game`");
 
     const fileName: string = getInput("wordleFileName");
 
@@ -40,7 +40,7 @@ export default wordle();
 
 export type Board = string[];
 
-export type GamePayload = {
+export type Inputs = {
   game: string;
   date?: string;
 };
