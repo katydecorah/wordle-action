@@ -1,6 +1,6 @@
 # wordle-to-yaml-action
 
-Save Wordle scores to a YAML file. Pair it with the [iOS Shortcut](shortcut/README.md) to automatically format and open the GitHub issue.
+Save Wordle scores to a YAML file. Pair it with the [iOS Shortcut](shortcut/README.md) to automatically [create a respository dispatch event](https://docs.github.com/en/rest/repos/repos#create-a-repository-dispatch-event).
 
 ## Example output
 
@@ -46,15 +46,14 @@ To use this action, create a new workflow in `.github/workflows` and modify it a
 name: Wordle
 
 on:
-  issues:
-    types: opened
+  repository_dispatch:
+    types: [wordle]
+  workflow_dispatch: # enables run button on github.com
 
 jobs:
   update_library:
     runs-on: macOS-latest
     name: Wordle
-    # only continue if issue has "wordle" label
-    if: contains( github.event.issue.labels.*.name, 'wordle')
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -62,15 +61,11 @@ jobs:
         uses: katydecorah/wordle-to-yaml-action@v3.1.0
       - name: Commit files
         run: |
+          git pull
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git commit -am "${{ env.WordleSummary }}"
           git push
-      - name: Close issue
-        uses: peter-evans/close-issue@v2
-        with:
-          issue-number: "${{ env.IssueNumber }}"
-          comment: "Added ${{ env.WordleSummary }}"
 ```
 
 ## Action options
@@ -79,27 +74,20 @@ jobs:
 
 <!-- END GENERATED DOCUMENTATION -->
 
-## Create an issue
+## Send an event
 
-The title of the issue should include the game number and your score, example:
+To trigger the action, you will [create a respository dispatch event](https://docs.github.com/en/rest/repos/repos#create-a-repository-dispatch-event) with the Wordle game.
 
-```
-Wordle 210 3/6
-```
+The [iOS Shortcut](shortcut/README.md) helps format and send the event.
 
-The body of the issue should contain the emoji board, examples:
+### Payload
 
-```
-🟩⬛⬛⬛⬛
-⬛⬛🟨🟩🟨
-🟩🟩🟩🟩🟩
-```
-
-or
-
-```
-Wordle 210 3/6
-🟩⬛⬛⬛⬛
-⬛⬛🟨🟩🟨
-🟩🟩🟩🟩🟩
+```js
+{
+  "event_type": "wordle", // Optional. This helps you filter events in the workflow, in case you have more than one.
+  "client_payload": {
+    "game": "", // Required. The Wordle game as formatted by the "Share" option seen after completing a game.
+    "date": "", // Optional. The date you finished the book in YYYY-MM-DD format. The default date is today.
+  }
+}
 ```
