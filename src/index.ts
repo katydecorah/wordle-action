@@ -9,20 +9,16 @@ import buildStatistics, { Statistics } from "./statistics";
 
 export async function wordle() {
   try {
+    // Get client_payload
+    const payload = github.context.payload.client_payload as GamePayload;
+    // Validate client_payload
+    if (!payload) return setFailed("Missing `client_payload`");
+    const { game, date } = payload;
+    if (!game) return setFailed("Missing `game` in `client_payload`");
+
     const fileName: string = getInput("wordleFileName");
 
-    if (!github.context.payload.issue) {
-      setFailed("Cannot find GitHub issue");
-      return;
-    }
-    const { title, number, body } = github.context.payload.issue;
-
-    if (!title || !body) {
-      throw new Error("Unable to parse GitHub issue.");
-    }
-
-    const newGame = parseGame({ title, body });
-    exportVariable("IssueNumber", number);
+    const newGame = parseGame({ game, date });
     exportVariable(
       "WordleSummary",
       `Wordle ${newGame.number} ${newGame.score}/6`
@@ -43,6 +39,11 @@ export async function wordle() {
 export default wordle();
 
 export type Board = string[];
+
+export type GamePayload = {
+  game: string;
+  date?: string;
+};
 
 export type Score = number | string;
 

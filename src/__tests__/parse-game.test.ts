@@ -11,8 +11,9 @@ describe("parseGame", () => {
   test("works", () => {
     expect(
       parseGame({
-        title: "Wordle 210 3/6",
-        body: `🟩⬛⬛⬛⬛
+        game: `Wordle 210 3/6
+
+🟩⬛⬛⬛⬛
 ⬛⬛🟨🟩🟨
 🟩🟩🟩🟩🟩`,
       })
@@ -31,8 +32,9 @@ describe("parseGame", () => {
     });
     expect(
       parseGame({
-        title: "Wordle 208 X/6",
-        body: `⬛⬛⬛⬛🟨
+        game: `Wordle 208 X/6
+
+⬛⬛⬛⬛🟨
 ⬛🟨⬛⬛⬛
 ⬛🟨⬛🟩⬛
 🟩⬛⬛⬛🟨
@@ -64,8 +66,7 @@ describe("parseGame", () => {
     });
     expect(
       parseGame({
-        title: "Wordle 209 6/6",
-        body: `Wordle 209 6/6
+        game: `Wordle 209 6/6
 
 🟩⬛🟨⬛🟨
 🟩🟩⬛⬛⬛

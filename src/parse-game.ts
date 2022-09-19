@@ -1,23 +1,22 @@
 import { Game, Board } from "./index";
 
 export default function parseGame({
-  title,
-  body,
+  game,
   date,
 }: {
-  title: string;
-  body: string;
+  game: string;
   date?: string;
 }): Game {
   try {
-    const split = title.split(" ");
-    if (!split || split.length !== 3) {
+    const [titleString, body] = game.split("\n\n");
+    if (!titleString.match(/Wordle \d\d\d (\d|X)\/6/)) {
       throw new Error(
-        "The GitHub Issue title is not in the correct format. Must be: `Wordle ### #/#`"
+        `The GitHub Issue title is not in the correct format. Must be: \`Wordle ### #/#\``
       );
     }
-    const number = parseInt(split[1]);
-    const score = split[2][0] === "X" ? "X" : parseInt(split[2][0]);
+    const title = titleString.split(" ");
+    const number = parseInt(title[1]);
+    const score = title[2][0] === "X" ? "X" : parseInt(title[2][0]);
     const board = checkBoard(body);
     const won = score !== "X";
     const boardWords = board.map(emojiToWord);
@@ -76,13 +75,13 @@ export function buildGames(previousGames: Game[], newGame: Game) {
 }
 
 function prepareGameForParsing(game: Game): {
-  title: string;
-  body: string;
+  game: string;
   date?: string;
 } {
   return {
-    title: `Wordle ${game.number} ${game.score}/6`,
-    body: game.board.join("\n"),
+    game: `Wordle ${game.number} ${game.score}/6
+
+${game.board.join("\n")}`,
     date: game.date,
   };
 }

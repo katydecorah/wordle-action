@@ -9805,14 +9805,15 @@ var core = __nccwpck_require__(2186);
 // EXTERNAL MODULE: ./node_modules/@actions/github/lib/github.js
 var github = __nccwpck_require__(5438);
 ;// CONCATENATED MODULE: ./src/parse-game.ts
-function parseGame({ title, body, date, }) {
+function parseGame({ game, date, }) {
     try {
-        const split = title.split(" ");
-        if (!split || split.length !== 3) {
-            throw new Error("The GitHub Issue title is not in the correct format. Must be: `Wordle ### #/#`");
+        const [titleString, body] = game.split("\n\n");
+        if (!titleString.match(/Wordle \d\d\d (\d|X)\/6/)) {
+            throw new Error(`The GitHub Issue title is not in the correct format. Must be: \`Wordle ### #/#\``);
         }
-        const number = parseInt(split[1]);
-        const score = split[2][0] === "X" ? "X" : parseInt(split[2][0]);
+        const title = titleString.split(" ");
+        const number = parseInt(title[1]);
+        const score = title[2][0] === "X" ? "X" : parseInt(title[2][0]);
         const board = checkBoard(body);
         const won = score !== "X";
         const boardWords = board.map(emojiToWord);
@@ -9867,8 +9868,9 @@ function buildGames(previousGames, newGame) {
 }
 function prepareGameForParsing(game) {
     return {
-        title: `Wordle ${game.number} ${game.score}/6`,
-        body: game.board.join("\n"),
+        game: `Wordle ${game.number} ${game.score}/6
+
+${game.board.join("\n")}`,
         date: game.date,
     };
 }
@@ -13918,17 +13920,16 @@ var src_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argu
 function wordle() {
     return src_awaiter(this, void 0, void 0, function* () {
         try {
+            // Get client_payload
+            const payload = github.context.payload.client_payload;
+            // Validate client_payload
+            if (!payload)
+                return (0,core.setFailed)("Missing `client_payload`");
+            const { game, date } = payload;
+            if (!game)
+                return (0,core.setFailed)("Missing `game` in `client_payload`");
             const fileName = (0,core.getInput)("wordleFileName");
-            if (!github.context.payload.issue) {
-                (0,core.setFailed)("Cannot find GitHub issue");
-                return;
-            }
-            const { title, number, body } = github.context.payload.issue;
-            if (!title || !body) {
-                throw new Error("Unable to parse GitHub issue.");
-            }
-            const newGame = parseGame({ title, body });
-            (0,core.exportVariable)("IssueNumber", number);
+            const newGame = parseGame({ game, date });
             (0,core.exportVariable)("WordleSummary", `Wordle ${newGame.number} ${newGame.score}/6`);
             const previousGames = (yield toJson(fileName));
             const games = buildGames(previousGames, newGame);

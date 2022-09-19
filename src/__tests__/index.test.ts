@@ -26,30 +26,27 @@ jest.mock("../read-file", () => {
   return jest.fn().mockImplementation(() => mockReadFile);
 });
 
-const goodIsue = {
-  title: "Wordle 213 5/6",
-  body: `🟩⬛🟨⬛⬛
-🟩🟩⬛⬛⬛
-🟩🟩⬛🟨⬛
-🟩🟩🟩🟨⬛
-🟩🟩🟩🟩🟩`,
-  number: 1,
-};
-
 describe("index", () => {
   test("works", async () => {
     jest.useFakeTimers().setSystemTime(new Date("2022-01-18").getTime());
     Object.defineProperty(github, "context", {
       value: {
         payload: {
-          issue: goodIsue,
+          client_payload: {
+            game: `Wordle 213 5/6
+
+🟩⬛🟨⬛⬛
+🟩🟩⬛⬛⬛
+🟩🟩⬛🟨⬛
+🟩🟩🟩🟨⬛
+🟩🟩🟩🟩🟩`,
+          },
         },
       },
     });
     await wordle();
-    expect(exportVariable).toHaveBeenNthCalledWith(1, "IssueNumber", 1);
     expect(exportVariable).toHaveBeenNthCalledWith(
-      2,
+      1,
       "WordleSummary",
       "Wordle 213 5/6"
     );
@@ -129,31 +126,43 @@ describe("index", () => {
   test("error, no payload", async () => {
     Object.defineProperty(github, "context", {
       value: {
+        payload: {},
+      },
+    });
+    await wordle();
+    expect(setFailed).toHaveBeenCalledWith("Missing `client_payload`");
+  });
+
+  test("error, missing game", async () => {
+    Object.defineProperty(github, "context", {
+      value: {
         payload: {
-          issue: {
-            number: 1,
+          client_payload: {
+            date: "2022-02-02",
           },
         },
       },
     });
     await wordle();
-    expect(setFailed).toHaveBeenCalledWith("Unable to parse GitHub issue.");
+    expect(setFailed).toHaveBeenCalledWith(
+      "Missing `game` in `client_payload`"
+    );
   });
 
   test("error, bad board", async () => {
     Object.defineProperty(github, "context", {
       value: {
         payload: {
-          issue: {
-            title: "Wordle 213 5/6",
-            body: `🟩⬛🟨⬛⬛
+          client_payload: {
+            game: `"Wordle 213 5/6
+
+🟩⬛🟨⬛⬛
 🟩🟩⬛⬛⬛
 🟩🟩⬛⬛⬛
 🟩🟩⬛⬛⬛
 🟩🟩⬛🟨⬛
 🟩🟩🟩🟨⬛
 🟩🟩🟩🟩🟩`,
-            number: 1,
           },
         },
       },
@@ -168,9 +177,12 @@ describe("index", () => {
     Object.defineProperty(github, "context", {
       value: {
         payload: {
-          issue: {
-            ...goodIsue,
-            title: "Wordle",
+          client_payload: {
+            game: `🟩⬛🟨⬛⬛
+🟩🟩⬛⬛⬛
+🟩🟩⬛🟨⬛
+🟩🟩🟩🟨⬛
+🟩🟩🟩🟩🟩`,
           },
         },
       },
