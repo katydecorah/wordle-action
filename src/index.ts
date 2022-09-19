@@ -3,9 +3,9 @@
 import { getInput, exportVariable, setFailed } from "@actions/core";
 import * as github from "@actions/github";
 import parseGame, { buildGames } from "./parse-game";
-import toJson from "./to-json";
 import returnWriteFile from "./write-file";
 import buildStatistics, { Statistics } from "./statistics";
+import returnReadFile from "./read-file";
 
 export async function wordle() {
   try {
@@ -24,7 +24,8 @@ export async function wordle() {
       `Wordle ${newGame.number} ${newGame.score}/6`
     );
 
-    const previousGames = (await toJson(fileName)) as Game[];
+    const previousGames = (await returnReadFile(fileName)) as Game[];
+
     const games = buildGames(previousGames, newGame);
 
     await returnWriteFile(fileName, {
@@ -59,6 +60,6 @@ export type Game = {
 
 export type SquareEmoji = "⬜" | "⬛" | "🟨" | "🟩";
 
-export interface Yaml extends Statistics {
+export interface Json extends Statistics {
   games: Game[];
 }

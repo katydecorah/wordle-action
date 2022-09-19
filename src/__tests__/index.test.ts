@@ -3,30 +3,34 @@ import { wordle } from "../index";
 import * as github from "@actions/github";
 import { setFailed, exportVariable } from "@actions/core";
 import returnWriteFile from "../write-file";
+import { promises } from "fs";
 
-const mockReadFile = `games:
-  - number: 210
-    score: 3
-    board:
-      - "🟩⬛⬛⬛⬛"
-      - "⬛⬛🟨🟩🟨"
-      - "🟩🟩🟩🟩🟩"
-    won: true
-    date: "2022-01-15"
-`;
+const mockWordleFile = JSON.stringify({
+  games: [
+    {
+      number: 210,
+      score: 3,
+      board: ["🟩⬛⬛⬛⬛", "⬛⬛🟨🟩🟨", "🟩🟩🟩🟩🟩"],
+      won: true,
+      date: "2022-01-15",
+    },
+  ],
+});
+
 jest.mock("@actions/core", () => {
   return {
-    getInput: jest.fn().mockImplementation(() => "oh-my-wordle.yml"),
+    getInput: jest.fn().mockImplementation(() => "oh-my-wordle.json"),
     setFailed: jest.fn(),
     exportVariable: jest.fn(),
   };
 });
 jest.mock("../write-file");
-jest.mock("../read-file", () => {
-  return jest.fn().mockImplementation(() => mockReadFile);
-});
 
 describe("index", () => {
+  beforeEach(() => {
+    jest.spyOn(promises, "readFile").mockResolvedValue(mockWordleFile);
+  });
+
   test("works", async () => {
     jest.useFakeTimers().setSystemTime(new Date("2022-01-18").getTime());
     Object.defineProperty(github, "context", {
@@ -53,7 +57,7 @@ describe("index", () => {
     expect(setFailed).not.toHaveBeenCalledWith();
     expect(returnWriteFile.mock.calls[0]).toMatchInlineSnapshot(`
       [
-        "oh-my-wordle.yml",
+        "oh-my-wordle.json",
         {
           "distribution": {
             "1": 0,
@@ -143,7 +147,7 @@ describe("index", () => {
     expect(setFailed).not.toHaveBeenCalledWith();
     expect(returnWriteFile.mock.calls[0]).toMatchInlineSnapshot(`
       [
-        "oh-my-wordle.yml",
+        "oh-my-wordle.json",
         {
           "distribution": {
             "1": 0,
