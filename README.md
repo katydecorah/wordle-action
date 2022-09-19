@@ -46,9 +46,6 @@ To use this action, create a new workflow in `.github/workflows` and modify it a
 name: Wordle
 
 on:
-  repository_dispatch:
-    types: [wordle]
-  # Trigger from github.com
   workflow_dispatch:
     inputs:
       game:
