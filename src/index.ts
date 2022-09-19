@@ -1,6 +1,6 @@
 "use strict";
 
-import { getInput, exportVariable, setFailed, debug } from "@actions/core";
+import { getInput, exportVariable, setFailed } from "@actions/core";
 import * as github from "@actions/github";
 import parseGame, { buildGames } from "./parse-game";
 import toJson from "./to-json";
@@ -11,7 +11,6 @@ export async function wordle() {
   try {
     // Get inputs
     const inputs = github.context.payload.inputs as Inputs;
-    debug(JSON.stringify(inputs, null, 2));
     // Validate inputs
     if (!inputs) return setFailed("Missing `inputs`");
     const { game, date } = inputs;

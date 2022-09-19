@@ -123,6 +123,92 @@ describe("index", () => {
     `);
   });
 
+  test("works, from inputs", async () => {
+    jest.useFakeTimers().setSystemTime(new Date("2022-09-19").getTime());
+    Object.defineProperty(github, "context", {
+      value: {
+        payload: {
+          inputs: {
+            game: `Wordle 457 3/6  ⬛⬛🟨⬛🟩 🟨🟩🟩⬛🟩 🟩🟩🟩🟩🟩`,
+          },
+        },
+      },
+    });
+    await wordle();
+    expect(exportVariable).toHaveBeenNthCalledWith(
+      1,
+      "WordleSummary",
+      "Wordle 457 3/6"
+    );
+    expect(setFailed).not.toHaveBeenCalledWith();
+    expect(returnWriteFile.mock.calls[0]).toMatchInlineSnapshot(`
+      [
+        "oh-my-wordle.yml",
+        {
+          "distribution": {
+            "1": 0,
+            "2": 0,
+            "3": 2,
+            "4": 0,
+            "5": 0,
+            "6": 0,
+            "X": 0,
+          },
+          "distributionPercent": {
+            "1": 0,
+            "2": 0,
+            "3": 100,
+            "4": 0,
+            "5": 0,
+            "6": 0,
+            "X": 0,
+          },
+          "games": [
+            {
+              "altText": "The player won the game in 3 guesses.",
+              "board": [
+                "🟩⬛⬛⬛⬛",
+                "⬛⬛🟨🟩🟨",
+                "🟩🟩🟩🟩🟩",
+              ],
+              "boardWords": [
+                "yes no no no no",
+                "no no almost yes almost",
+                "yes yes yes yes yes",
+              ],
+              "date": "2022-01-15",
+              "number": 210,
+              "score": 3,
+              "won": true,
+            },
+            {
+              "altText": "The player won the game in 3 guesses.",
+              "board": [
+                "⬛⬛🟨⬛🟩",
+                "🟨🟩🟩⬛🟩",
+                "🟩🟩🟩🟩🟩",
+              ],
+              "boardWords": [
+                "no no almost no yes",
+                "almost yes yes no yes",
+                "yes yes yes yes yes",
+              ],
+              "date": "2022-09-19",
+              "number": 457,
+              "score": 3,
+              "won": true,
+            },
+          ],
+          "streakCurrent": 1,
+          "streakMax": 1,
+          "totalPlayed": 2,
+          "totalWon": 2,
+          "totalWonPercent": "100",
+        },
+      ]
+    `);
+  });
+
   test("error, no payload", async () => {
     Object.defineProperty(github, "context", {
       value: {
@@ -166,9 +252,11 @@ describe("index", () => {
       },
     });
     await wordle();
-    expect(setFailed).toHaveBeenCalledWith(
-      'Error: Wordle board is invalid: ["🟩⬛🟨⬛⬛","🟩🟩⬛⬛⬛","🟩🟩⬛⬛⬛","🟩🟩⬛⬛⬛","🟩🟩⬛🟨⬛","🟩🟩🟩🟨⬛","🟩🟩🟩🟩🟩"]'
-    );
+    expect(setFailed.mock.calls[0]).toMatchInlineSnapshot(`
+      [
+        "Error: Wordle board is invalid: ["\\"","🟩⬛🟨⬛⬛","🟩🟩⬛⬛⬛","🟩🟩⬛⬛⬛","🟩🟩⬛⬛⬛","🟩🟩⬛🟨⬛","🟩🟩🟩🟨⬛","🟩🟩🟩🟩🟩"]",
+      ]
+    `);
   });
 
   test("error, bad title", async () => {
