@@ -4,9 +4,12 @@ on:
   workflow_dispatch:
     inputs:
       game:
-        description: Wordle game
+        description: The Wordle game as formatted by the "Share" option seen after completing a game.
         required: true
-        type: text
+        type: string
+      date:
+        description: The date you played Wordle (YYYY-MM-DD). The default date is today.
+        type: string
 
 jobs:
   update_library:
