@@ -53,9 +53,12 @@ on:
   workflow_dispatch:
     inputs:
       game:
-        description: Wordle game
+        description: The Wordle game as formatted by the "Share" option seen after completing a game.
         required: true
-        type: text
+        type: string
+      date:
+        description: The date you played Wordle (YYYY-MM-DD). The default date is today.
+        type: string
 
 jobs:
   update_library:
@@ -75,8 +78,22 @@ jobs:
           git push
 ```
 
+
 ## Action options
 
 - `wordleFileName`: The file where you want to save your Wordle scores. Default: `_data/wordle.json`.
 
+## Trigger the action
+
+To trigger the action, [create a workflow dispatch event](https://docs.github.com/en/rest/actions/workflows#create-a-workflow-dispatch-event) with the following body parameters:
+
+```js
+{ 
+  "ref": "main", // Required. The git reference for the workflow, a branch or tag name.
+  "inputs": {
+    "game": "", // Required. The Wordle game as formatted by the "Share" option seen after completing a game.
+    "date": "", // The date you played Wordle (YYYY-MM-DD). The default date is today.
+  }
+}
+```
 <!-- END GENERATED DOCUMENTATION -->
