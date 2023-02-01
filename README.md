@@ -78,7 +78,6 @@ jobs:
           git push
 ```
 
-
 ## Action options
 
 - `wordleFileName`: The file where you want to save your Wordle scores. Default: `_data/wordle.json`.
