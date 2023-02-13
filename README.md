@@ -87,7 +87,7 @@ jobs:
 To trigger the action, [create a workflow dispatch event](https://docs.github.com/en/rest/actions/workflows#create-a-workflow-dispatch-event) with the following body parameters:
 
 ```js
-{ 
+{
   "ref": "main", // Required. The git reference for the workflow, a branch or tag name.
   "inputs": {
     "game": "", // Required. The Wordle game as formatted by the "Share" option seen after completing a game.
@@ -95,4 +95,5 @@ To trigger the action, [create a workflow dispatch event](https://docs.github.co
   }
 }
 ```
+
 <!-- END GENERATED DOCUMENTATION -->
