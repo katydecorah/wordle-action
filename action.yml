@@ -1,7 +1,7 @@
 name: Wordle
 description: Save your Wordle scores to a JSON file.
 runs:
-  using: node16
+  using: node20
   main: dist/index.js
 
 inputs:
