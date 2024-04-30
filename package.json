@@ -1,6 +1,6 @@
 {
   "name": "wordle-action",
-  "version": "6.1.0",
+  "version": "6.2.0",
   "description": "Save Wordle score to a JSON file.",
   "main": "dist/index.js",
   "type": "module",
