@@ -68,7 +68,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Wordle
-        uses: katydecorah/wordle-action@v6.1.0
+        uses: katydecorah/wordle-action@v6.2.0
       - name: Commit files
         run: |
           git pull
