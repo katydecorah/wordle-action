@@ -66,7 +66,7 @@ jobs:
     name: Wordle
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Wordle
         uses: katydecorah/wordle-action@v6.2.0
       - name: Commit files
